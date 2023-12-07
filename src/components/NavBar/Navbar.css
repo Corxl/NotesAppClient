@@ -1,0 +1,70 @@
+:root {
+  --select-color: rgb(80, 80, 80);
+}
+
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: -20px;
+  color: rgb(97, 97, 97);
+  height: 100%;
+}
+
+.account-avatar{
+  margin: 10px;
+  background-color:rgb(175, 175, 175);
+  
+}
+
+.account-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.account-avatar:hover{
+  cursor: pointer;
+}
+
+.navbar-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(53, 53, 53);
+  width: 100%;
+  height: 100%;
+}
+
+.navbar-menu-item {
+  background-color: transparent;
+  border: none;
+  color: white;
+  padding: 20px;
+  width: 100%;
+} 
+
+.navbar-menu-item-selected { 
+  background-color: var(--select-color); 
+}
+
+.navbar-menu-item:hover {
+  cursor: pointer;
+  background-color: var(--select-color); ; 
+  color: grey;
+  user-select: none;
+}
+
+.main-navbar-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1px;
+  background-color: rgba(114, 21, 21, 0);
+  width: 100%;
+  height: 70px;
+}

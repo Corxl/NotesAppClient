@@ -1,0 +1,15 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+.note {
+  width: 75%;
+}
+
+.input:focus {
+  outline: none; 
+}
