@@ -8,15 +8,15 @@ import 'primereact/resources/themes/lara-light-cyan/theme.css';
 
 function App() { 
   return (
-		<div className="App">
-			<HashRouter>
-				<Navbar />
-				<Routes>
-					<Route path="/" element={<NotesPage />} />
-					<Route path="/account" element={<AccountPage />} />
-				</Routes>
-			</HashRouter>
+	<HashRouter>
+		<div className='App'>
+			<Navbar />
+			<Routes>
+				<Route path="/" element={<NotesPage />} />
+				<Route path="/account" element={<AccountPage />} />
+			</Routes>
 		</div>
+	</HashRouter>
 	);
 }
 

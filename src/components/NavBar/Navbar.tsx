@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const pages = [
     {
-      name: 'Home',
+      name: 'Notes',
       path: '/'
     },
     {
@@ -30,28 +30,26 @@ export default function Navbar() {
     setCurrentPageName(pages.find(page => page.path === path)!)
   }
   return (
-    <div className='main-container'>
-      <div className='navbar-menu'> 
-        <div className='main-navbar-items' style={{height: "100%"}}>
-          {pages.map((page, index) => {
-          return (
-            <button
-              className={'navbar-menu-item' + (currentPageName.name === page.name ? ' navbar-menu-item-selected' : '')} 
-              key={index} 
-              onClick={()=>{navigateTo(page.path)}} 
-              style={{cursor: 'pointer'}}
-            >{page.name}</button> 
-          )
-        })}
-        </div>
-        <Avatar label='?' className='account-avatar' onClick={(e) => accountOptions.current?.toggle(e)}/>
-        <OverlayPanel ref={accountOptions}> 
-          <div className='account-options'>
-            <Button label='Signup' className='account-option' onClick={()=>{navigateTo('/account')}}/>
-            <Button label='Login' className='account-option' onClick={()=>{}}/>
-          </div>
-        </OverlayPanel>
+    <div className='navbar-menu'> 
+      <div className='main-navbar-items'>
+        {pages.map((page, index) => {
+        return (
+          <button
+            className={'navbar-menu-item' + (currentPageName.name === page.name ? ' navbar-menu-item-selected' : '')} 
+            key={index} 
+            onClick={()=>{navigateTo(page.path)}} 
+            style={{cursor: 'pointer'}}
+          >{page.name}</button> 
+        )
+      })}
       </div>
+      <Avatar label='?' className='account-avatar' onClick={(e) => accountOptions.current?.toggle(e)}/>
+      <OverlayPanel ref={accountOptions}> 
+        <div className='account-options'>
+          <Button label='Signup' className='account-option' onClick={()=>{navigateTo('/account')}}/>
+          <Button label='Login' className='account-option' onClick={()=>{}}/>
+        </div>
+      </OverlayPanel>
     </div>
   )
 }
