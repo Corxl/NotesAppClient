@@ -1,0 +1,42 @@
+ .note {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 2px;
+}
+
+.note-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: grey; 
+    padding: 15px;
+    text-align: start;
+    font-size: 250%;
+}
+
+.note-content {
+    background-color: grey;
+    padding: 15px;
+    height: 100%;
+    font-size: 150%;
+    overflow: scroll;
+    text-align: start;
+}
+
+.note-buttons {
+    display: flex;
+    flex-direction: column; 
+    gap: 5px;
+}
+
+.note-edit-button {
+    border: black solid 2px;
+    background-color: transparent;
+    color: white;
+    font-size: 150%;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+}
