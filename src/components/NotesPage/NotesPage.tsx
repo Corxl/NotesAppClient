@@ -1,46 +1,46 @@
 import 'primeicons/primeicons.css';
 import { Button } from 'primereact/button';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import Note from '../Note/Note.tsx';
 import './NotesPage.css';
 
+interface PageNote {
+  title: string,
+  content: string,
+  id: string
+}
+
 export default function NotesPage() { 
 
-  const [currentNote, setCurrentNote] = useState({
-    index: -1,
-    title: '',
-    content: ''
-  })
+  const [currentNote, setCurrentNoteId] = useState<PageNote>()
 
-  const notes = useMemo(()=> {
-    return [
+  const [notes, setNotes] = useState<PageNote[]>(
+  [
     {
       title: 'Note 1',
-      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao' 
+      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
+      id: uuidv4() 
     },
     {
       title: 'Note 2',
-      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao lmao long note the is This'
+      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao lmao long note the is This',
+      id: uuidv4() 
     },
     {
       title: 'Note 3',
-      content: '9ahUovr0e2PUUCnj'
+      content: '9ahUovr0e2PUUCnj',
+      id: uuidv4() 
     }
-  ]}, [])
+  ])
 
   function createNote() {
-    notes.push({
-      title: 'Untitled Note',
-      content: ''
-    }) 
-  }
+    setNotes([...notes, {title: 'New Note', content: '', id: uuidv4()}])
+  } 
 
-
-  useEffect(() => {
-    if (notes.length > 0) {
-      setCurrentNote({...notes[0], index: 0})
-    } 
-  }, [notes])
+  const deleteNote = useCallback((id: uuidv4) => {
+    setNotes(notes.filter(note => note.id !== id))
+  }, [notes]) 
 
   return (
     <div className='notes-container'>
@@ -49,7 +49,7 @@ export default function NotesPage() {
           notes.map((note, index) => {
             return (
               <div style={{gap: "20px"}} key={index}>
-                <div className={'note-selector' + (currentNote.index === index ? ' selected' : '')} key={index} onClick={()=>setCurrentNote({...notes[index], index: index})}>
+                <div className={'note-selector' + (currentNote?.id === note.id ? ' selected' : '')} key={index} onClick={()=>setCurrentNoteId(note)}>
                   <div className='note-selector-title' key={index}>{note.title}</div>
                   <div className='note-selector-description' key={index}>{note.content}</div>
                 </div>
@@ -60,7 +60,7 @@ export default function NotesPage() {
         }
         <Button icon='pi pi-plus' severity='secondary' className='add-note-button' onClick={()=> createNote()}/> 
       </div>
-      <Note title={currentNote.title} content={currentNote.content}/>
+      <Note note={currentNote || {title: '', content: '', id: uuidv4()}} onDelete={deleteNote}/>
     </div>
   )
 }
