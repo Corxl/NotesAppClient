@@ -31,6 +31,26 @@ export default function NotesPage() {
       title: 'Note 3',
       content: '9ahUovr0e2PUUCnj',
       id: uuidv4() 
+    },
+    {
+      title: 'Note 4',
+      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
+      id: uuidv4() 
+    },
+    {
+      title: 'Note 5',
+      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
+      id: uuidv4() 
+    },
+    {
+      title: 'Note 6',
+      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
+      id: uuidv4() 
+    },
+    {
+      title: 'Note 7',
+      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
+      id: uuidv4()
     }
   ])
 
@@ -38,7 +58,7 @@ export default function NotesPage() {
     setNotes([...notes, {title: 'New Note', content: '', id: uuidv4()}])
   } 
 
-  const deleteNote = useCallback((id: uuidv4) => {
+  const deleteNote = useCallback((id) => {
     setNotes(notes.filter(note => note.id !== id))
   }, [notes]) 
 
@@ -59,6 +79,7 @@ export default function NotesPage() {
           })
         }
         <Button icon='pi pi-plus' severity='secondary' className='add-note-button' onClick={()=> createNote()}/> 
+        <Button icon='pi pi-trash' severity='secondary' className='add-note-button' onClick={()=> createNote()}/>
       </div>
       <Note note={currentNote || {title: '', content: '', id: uuidv4()}} onDelete={deleteNote}/>
     </div>
