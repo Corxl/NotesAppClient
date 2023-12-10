@@ -21,8 +21,7 @@
   align-content: flex-start;
   align-items: center;
   background-color: var(--select-color);
-  width: 20%;
-  max-width: 20%;
+  width: 15vw;
   height: 100%;
   padding: 5px;
 } 
@@ -68,7 +67,6 @@
 
 .note-selector-description {
   text-align: start;
-  font-size: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

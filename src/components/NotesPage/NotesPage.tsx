@@ -34,7 +34,7 @@ export default function NotesPage() {
       id: uuidv4() 
     },
     {
-      title: 'Note 3',
+      title: 'Note 3ssssss sssssssssss sssssssssssss ssssssssssss',
       content: '9ahUovr0e2PUUCnj',
       id: uuidv4() 
     },
@@ -67,7 +67,7 @@ export default function NotesPage() {
   const deleteNote = useCallback((id) => {
     setCurrentNoteId(notes.length > 1 ? notes[notes.indexOf(currentNote)] : emptyPage)
     setNotes(notes.filter(note => note.id !== id))
-  }, [notes]) 
+  }, [notes, currentNote]) 
 
   return (
     <div className='notes-container'>
