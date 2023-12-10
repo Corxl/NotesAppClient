@@ -11,9 +11,15 @@ interface PageNote {
   id: string
 }
 
+const emptyPage = {
+  title: '',
+  content: '',
+  id: ''
+}
+
 export default function NotesPage() { 
 
-  const [currentNote, setCurrentNoteId] = useState<PageNote>()
+  const [currentNote, setCurrentNoteId] = useState<PageNote>(emptyPage)
 
   const [notes, setNotes] = useState<PageNote[]>(
   [
@@ -55,10 +61,11 @@ export default function NotesPage() {
   ])
 
   function createNote() {
-    setNotes([...notes, {title: 'New Note', content: '', id: uuidv4()}])
+    setNotes([...notes, {title: 'New Notes', content: '', id: uuidv4()}])
   } 
 
   const deleteNote = useCallback((id) => {
+    setCurrentNoteId(notes.length > 1 ? notes[notes.indexOf(currentNote)] : emptyPage)
     setNotes(notes.filter(note => note.id !== id))
   }, [notes]) 
 
@@ -68,9 +75,9 @@ export default function NotesPage() {
         {
           notes.map((note, index) => {
             return (
-              <div style={{gap: "20px"}} key={index}>
+              <div style={{gap: "20px",  width: "100%"}} key={index}>
                 <div className={'note-selector' + (currentNote?.id === note.id ? ' selected' : '')} key={index} onClick={()=>setCurrentNoteId(note)}>
-                  <div className='note-selector-title' key={index}>{note.title}</div>
+                  <div className='note-selector-description' style={{fontSize: "125%"}} key={index}>{note.title}</div>
                   <div className='note-selector-description' key={index}>{note.content}</div>
                 </div>
                 <div className='divider' key={index}/> 
