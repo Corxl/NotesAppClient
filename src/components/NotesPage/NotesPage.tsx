@@ -1,94 +1,92 @@
+
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import { IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
-import { Button } from 'primereact/button';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Note from '../Note/Note.tsx';
+import { DefaultNotePage } from '../Note/index.js';
 import './NotesPage.css';
 
 interface PageNote {
   title: string,
   content: string,
-  id: string
-}
-
-const emptyPage = {
-  title: '',
-  content: '',
-  id: ''
-}
+  id: typeof uuidv4
+} 
 
 export default function NotesPage() { 
 
-  const [currentNote, setCurrentNoteId] = useState<PageNote>(emptyPage)
+  const [currentNote, setCurrentNote] = useState<PageNote | undefined>(undefined)
 
-  const [notes, setNotes] = useState<PageNote[]>(
-  [
-    {
-      title: 'Note 1',
-      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
-      id: uuidv4() 
-    },
-    {
-      title: 'Note 2',
-      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao lmao long note the is This',
-      id: uuidv4() 
-    },
-    {
-      title: 'Note 3ssssss sssssssssss sssssssssssss ssssssssssss',
-      content: '9ahUovr0e2PUUCnj',
-      id: uuidv4() 
-    },
-    {
-      title: 'Note 4',
-      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
-      id: uuidv4() 
-    },
-    {
-      title: 'Note 5',
-      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
-      id: uuidv4() 
-    },
-    {
-      title: 'Note 6',
-      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
-      id: uuidv4() 
-    },
-    {
-      title: 'Note 7',
-      content: 'This is the content of note 1 and it is very long so I will amke sure that this creates the three dots whenever the content is too long for me to be able to see lmao',
-      id: uuidv4()
-    }
-  ])
+  const [notes, setNotes] = useState<PageNote[]>([])
+
+  const [loading, setLoading] = useState<boolean>(true)
 
   function createNote() {
+    if (notes === undefined) return;
     setNotes([...notes, {title: 'New Notes', content: '', id: uuidv4()}])
   } 
 
-  const deleteNote = useCallback((id) => {
-    setCurrentNoteId(notes.length > 1 ? notes[notes.indexOf(currentNote)] : emptyPage)
-    setNotes(notes.filter(note => note.id !== id))
+  const deleteNote = useCallback((id: typeof uuidv4) => {
+    
+    if (notes.length > 0 && currentNote !== undefined) {
+      if (notes.indexOf(currentNote) === notes.length - 1) {
+        setCurrentNote(notes[notes.indexOf(currentNote) - 1])
+      } else {
+        setCurrentNote(notes[notes.indexOf(currentNote) + 1])
+      }
+    } else {
+      setCurrentNote(undefined)
+    }
+    setNotes(list => list.filter(note => note.id !== id)) 
   }, [notes, currentNote]) 
+
+  useEffect(() => {
+     setTimeout(() => {
+      setLoading(false);
+     }, 2500);
+  }, [])  
 
   return (
     <div className='notes-container'>
       <div className='notes-list'>
+        {loading && 
+          [...Array(7)].map((_, index) => {
+            return (
+            <div style={{display: "flex", flexDirection: "column", width: "100%", height: "auto", gap: "10px", padding: "5px"}}>
+              <Skeleton variant='rectangular' width='70%' height='15px' animation='wave' />
+              <Skeleton variant='rectangular' width='90%' height='10px' animation='wave' />
+              <Skeleton variant='rectangular' width='85%' height='10px' animation='wave' />
+              <Skeleton variant='rectangular' width='100%' height='5px' animation='wave' />
+            </div>
+            )
+          })
+        }
         {
           notes.map((note, index) => {
             return (
               <div style={{gap: "20px",  width: "100%"}} key={index}>
-                <div className={'note-selector' + (currentNote?.id === note.id ? ' selected' : '')} key={index} onClick={()=>setCurrentNoteId(note)}>
-                  <div className='note-selector-description' style={{fontSize: "125%"}} key={index}>{note.title}</div>
-                  <div className='note-selector-description' key={index}>{note.content}</div>
+                <div className={'note-selector' + (currentNote?.id === note.id ? ' selected' : '')} key={index + 1} onClick={()=>setCurrentNote(note)}>
+                  <div className='note-selector-description' style={{fontSize: "125%"}} key={note.title}>{note.title}</div>
+                  <div className='note-selector-description' key={note.content}>{note.content}</div>
                 </div>
-                <div className='divider' key={index}/> 
+                <div className='divider' key={index + 2}/> 
               </div> 
             )
           })
         }
-        <Button icon='pi pi-plus' severity='secondary' className='add-note-button' onClick={()=> createNote()}/> 
-        <Button icon='pi pi-trash' severity='secondary' className='add-note-button' onClick={()=> createNote()}/>
+        {!loading && 
+        <div>
+          <IconButton onClick={()=> createNote()} >
+            <AddCircleOutline />
+          </IconButton>
+          <IconButton onClick={()=> setCurrentNote(undefined)} >
+            <AddCircleOutline style={{color: "red"}}/>
+          </IconButton>
+        </div>
+        }
       </div>
-      <Note note={currentNote || {title: '', content: '', id: uuidv4()}} onDelete={deleteNote}/>
+      {currentNote ? <Note note={currentNote} onDelete={deleteNote}/> : <DefaultNotePage addNewNote={createNote}/>}
     </div>
   )
 }
