@@ -3,7 +3,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import { Button, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import { InputTextarea } from 'primereact/inputtextarea';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { v4 as uuidv4 } from 'uuid';
 import './Note.css';
@@ -20,8 +20,7 @@ interface NoteProps {
 }
 
 export default function Note(props: NoteProps) {
-  const {note, onDelete, updateNote, index} = props; 
-  const { id } = note; 
+  const {note, /*onDelete, */ updateNote, index} = props; 
 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content); 
@@ -29,11 +28,11 @@ export default function Note(props: NoteProps) {
 
   const [saveConfirm, setSaveConfirm] = useState(false);
 
-  function refreshPage() {
+  const refreshPage = useCallback(() => {
     setIsEditing(false); 
     setTitle(note.title);
     setContent(note.content);
-  }
+  }, [note.title, note.content]);
 
   function saveNote() {
     updateNote(index, {title: title, content: content});
@@ -43,7 +42,7 @@ export default function Note(props: NoteProps) {
 
   useEffect(() => {
     refreshPage();
-  }, [note])
+  }, [note, refreshPage])
 
   return (
     <div className='note'>
