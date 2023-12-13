@@ -16,7 +16,7 @@ interface PageNote {
 
 export default function NotesPage() { 
 
-  const [currentNote, setCurrentNote] = useState<PageNote | undefined>(undefined)
+  const [noteIndex, setNoteIndex] = useState(-1)
 
   const [notes, setNotes] = useState<PageNote[]>([])
 
@@ -24,24 +24,32 @@ export default function NotesPage() {
 
   function createNote() {
     if (notes === undefined) return;
-    setNotes([...notes, {title: 'New Notes', content: '', id: uuidv4()}])
+    setNotes([...notes, {title: ('New Notes' + (notes.length > 0 ? ' (' + (notes.length + 1) + ')' : '' )), content: '', id: uuidv4()}])
   } 
 
-  const deleteNote = useCallback((id: typeof uuidv4) => {
-    
-    if (notes.length > 0 && currentNote !== undefined) {
-      if (notes.indexOf(currentNote) === notes.length - 1) {
-        setCurrentNote(notes[notes.indexOf(currentNote) - 1])
-      } else {
-        setCurrentNote(notes[notes.indexOf(currentNote) + 1])
-      }
-    } else {
-      setCurrentNote(undefined)
-    }
-    setNotes(list => list.filter(note => note.id !== id)) 
-  }, [notes, currentNote]) 
-
   useEffect(() => {
+    console.log(noteIndex);
+  } , [noteIndex]); 
+    
+
+  const deleteNote = useCallback((targetIndex: number) => {
+    setNotes(notes.filter((_, index) => index !== targetIndex)) 
+  }, [notes]) 
+
+  function updateNote (index: number, newNote: {title: string, content: string}) {
+    setNotes(notes.map((note, nIndex) => { 
+      console.log(newNote)
+      console.log(index)
+      console.log(noteIndex)
+      if (nIndex === index) {
+        return {title: newNote.title, content: newNote.content, id: note.id};
+      } else {
+        return note;
+      }
+    }))
+  }
+
+  useEffect(() => { // simulate loading
      setTimeout(() => {
       setLoading(false);
      }, 2500);
@@ -53,7 +61,7 @@ export default function NotesPage() {
         {loading && 
           [...Array(7)].map((_, index) => {
             return (
-            <div style={{display: "flex", flexDirection: "column", width: "100%", height: "auto", gap: "10px", padding: "5px"}}>
+            <div style={{display: "flex", flexDirection: "column", width: "100%", height: "auto", gap: "10px", padding: "5px"}} key={index}>
               <Skeleton variant='rectangular' width='70%' height='15px' animation='wave' />
               <Skeleton variant='rectangular' width='90%' height='10px' animation='wave' />
               <Skeleton variant='rectangular' width='85%' height='10px' animation='wave' />
@@ -66,7 +74,10 @@ export default function NotesPage() {
           notes.map((note, index) => {
             return (
               <div style={{gap: "20px",  width: "100%"}} key={index}>
-                <div className={'note-selector' + (currentNote?.id === note.id ? ' selected' : '')} key={index + 1} onClick={()=>setCurrentNote(note)}>
+                <div className={'note-selector' + (noteIndex === index ? ' selected' : '')} key={index + 1} onClick={()=>{
+                  setNoteIndex(index)
+                  console.log(noteIndex);
+                }}>
                   <div className='note-selector-description' style={{fontSize: "125%"}} key={note.title}>{note.title}</div>
                   <div className='note-selector-description' key={note.content}>{note.content}</div>
                 </div>
@@ -76,17 +87,15 @@ export default function NotesPage() {
           })
         }
         {!loading && 
-        <div>
-          <IconButton onClick={()=> createNote()} >
+        <div style={{display: 'flex', flexDirection: "column", width: "100%"}}>
+          <IconButton onClick={()=> createNote()}>
             <AddCircleOutline />
-          </IconButton>
-          <IconButton onClick={()=> setCurrentNote(undefined)} >
-            <AddCircleOutline style={{color: "red"}}/>
-          </IconButton>
+          </IconButton> 
+          <button className='add-button'>Create Note</button>
         </div>
         }
       </div>
-      {currentNote ? <Note note={currentNote} onDelete={deleteNote}/> : <DefaultNotePage addNewNote={createNote}/>}
+      {noteIndex >= 0 ? <Note note={notes[noteIndex]} index={noteIndex} onDelete={deleteNote} updateNote={updateNote}/> : <DefaultNotePage addNewNote={createNote}/>}
     </div>
   )
 }
