@@ -1,7 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SaveIcon from '@mui/icons-material/Save';
-import { IconButton } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
@@ -25,13 +25,20 @@ export default function Note(props: NoteProps) {
 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content); 
-
   const [isEditing, setIsEditing] = useState(false); 
+
+  const [saveConfirm, setSaveConfirm] = useState(false);
 
   function refreshPage() {
     setIsEditing(false); 
     setTitle(note.title);
     setContent(note.content);
+  }
+
+  function saveNote() {
+    updateNote(index, {title: title, content: content});
+    setIsEditing(editing => !editing);
+    refreshPage();
   }
 
   useEffect(() => {
@@ -41,7 +48,19 @@ export default function Note(props: NoteProps) {
 
   return (
     <div className='note'>
-      {/*<Button label='Create Note' className='note-selector' />*/}
+      <Dialog open={saveConfirm} onClose={() => setSaveConfirm(false)}>
+        <DialogTitle>Save Changes?</DialogTitle>
+
+        <DialogActions>
+          <Button onClick={() => {
+            setSaveConfirm(false) 
+          }}>Cancel</Button>
+          <Button onClick={() => {
+            saveNote();
+            setSaveConfirm(false) 
+          }}>Save</Button>
+        </DialogActions>
+      </Dialog> 
       <div className='note-header'>
         <div>
           {note.title}
@@ -60,9 +79,7 @@ export default function Note(props: NoteProps) {
           </IconButton> 
           {isEditing &&
             <IconButton className='note-button' onClick={() => {
-                updateNote(index, {title: title, content: content});
-                setIsEditing(editing => !editing);
-                refreshPage();
+                setSaveConfirm(true);
               }} >
               <SaveIcon />
             </IconButton> 
