@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
-import './Navbar.css';
-import { useNavigate } from 'react-router-dom';
 import { Avatar } from 'primereact/avatar';
-import { OverlayPanel } from 'primereact/overlaypanel';
 import { Button } from 'primereact/button';
+import { OverlayPanel } from 'primereact/overlaypanel';
+import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Navbar.css';
 
 
 export default function Navbar() {
@@ -20,10 +20,7 @@ export default function Navbar() {
   ]
 
   const accountOptions = useRef<OverlayPanel>(null);
-  const [currentPageName, setCurrentPageName] = useState(pages[0])
-
-
-
+  const [currentPageName, setCurrentPageName] = useState(pages[0]) 
   const navigation = useNavigate()
   const navigateTo = (path: string) => {
     navigation(path)

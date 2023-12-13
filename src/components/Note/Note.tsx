@@ -42,7 +42,6 @@ export default function Note(props: NoteProps) {
   }
 
   useEffect(() => {
-    console.log("ran");
     refreshPage();
   }, [note])
 

@@ -23,13 +23,8 @@ export default function NotesPage() {
   const [loading, setLoading] = useState<boolean>(true)
 
   function createNote() {
-    if (notes === undefined) return;
     setNotes([...notes, {title: ('New Notes' + (notes.length > 0 ? ' (' + (notes.length + 1) + ')' : '' )), content: '', id: uuidv4()}])
   } 
-
-  useEffect(() => {
-    console.log(noteIndex);
-  } , [noteIndex]); 
     
 
   const deleteNote = useCallback((targetIndex: number) => {
@@ -38,9 +33,6 @@ export default function NotesPage() {
 
   function updateNote (index: number, newNote: {title: string, content: string}) {
     setNotes(notes.map((note, nIndex) => { 
-      console.log(newNote)
-      console.log(index)
-      console.log(noteIndex)
       if (nIndex === index) {
         return {title: newNote.title, content: newNote.content, id: note.id};
       } else {
@@ -74,10 +66,7 @@ export default function NotesPage() {
           notes.map((note, index) => {
             return (
               <div style={{gap: "20px",  width: "100%"}} key={index}>
-                <div className={'note-selector' + (noteIndex === index ? ' selected' : '')} key={index + 1} onClick={()=>{
-                  setNoteIndex(index)
-                  console.log(noteIndex);
-                }}>
+                <div className={'note-selector' + (noteIndex === index ? ' selected' : '')} key={index + 1} onClick={()=> setNoteIndex(index)}>
                   <div className='note-selector-description' style={{fontSize: "125%"}} key={note.title}>{note.title}</div>
                   <div className='note-selector-description' key={note.content}>{note.content}</div>
                 </div>
