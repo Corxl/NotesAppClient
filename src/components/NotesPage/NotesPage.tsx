@@ -88,13 +88,13 @@ export default function NotesPage() {
         }
         {!loading && 
         <div style={{display: 'flex', flexDirection: "column", width: "100%"}}>
-          <IconButton onClick={()=> createNote()}>
-            <AddCircleOutline />
+          <IconButton onClick={()=> createNote()} size='large' style={{width: "fit-content", margin: "auto"}}>
+            <AddCircleOutline style={{width: '30px', height: '30px'}}/>
           </IconButton> 
-          <button className='add-button'>Create Note</button>
         </div>
         }
-      </div>
+      </div> 
+
       {noteIndex >= 0 ? <Note note={notes[noteIndex]} index={noteIndex} onDelete={deleteNote} updateNote={updateNote}/> : <DefaultNotePage addNewNote={createNote}/>}
     </div>
   )
