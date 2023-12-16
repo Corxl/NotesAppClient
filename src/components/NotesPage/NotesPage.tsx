@@ -1,6 +1,6 @@
 
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
-import { IconButton, Skeleton } from '@mui/material';
+import { Checkbox, IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,12 +18,16 @@ export default function NotesPage() {
 
   const [noteIndex, setNoteIndex] = useState(-1);
 
-  const [notes, setNotes] = useState<PageNote[]>([])
+  const [notes, setNotes] = useState<PageNote[]>([{
+    title: 'Welcome to Notes App!',
+    content: 'Click the button below to create a new note!',
+    id: uuidv4()
+  }])
 
   const [loading, setLoading] = useState<boolean>(true)
 
-  function createNote() {
-    setNotes([...notes, {title: ('New Notes' + (notes.length > 0 ? ' (' + (notes.length + 1) + ')' : '' )), content: '', id: uuidv4()}]);
+  function createNote() { 
+    setNotes([...notes, {title: 'Untitled Note', content: '', id: uuidv4()}]);
     setNoteIndex(notes.length);
   } 
     
@@ -43,6 +47,10 @@ export default function NotesPage() {
   }
 
   useEffect(() => { // simulate loading
+    if (notes.length > 0) {
+      setLoading(false);
+      return;
+    }
      setTimeout(() => {
       setLoading(false);
      }, 2500);
@@ -66,13 +74,17 @@ export default function NotesPage() {
         {
           notes.map((note, index) => {
             return (
-              <div style={{gap: "20px",  width: "100%"}} key={index}>
-                <div className={'note-selector' + (noteIndex === index ? ' selected' : '')} key={index + 1} onClick={()=> setNoteIndex(index)}>
-                  <div className='note-selector-description' style={{fontSize: "125%"}} key={note.title}>{note.title}</div>
-                  <div className='note-selector-description' key={note.content}>{note.content}</div>
-                </div>
-                <div className='divider' key={index + 2}/> 
-              </div> 
+              <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
+                <Checkbox />
+                <div style={{gap: "20px",  width: "100%"}} key={index}>
+                  
+                  <div className={'note-selector' + (noteIndex === index ? ' selected' : '')} key={index + 1} onClick={()=> setNoteIndex(index)}>
+                    <div className='note-selector-description' style={{fontSize: "125%"}} key={note.title}>{note.title}</div>
+                    <div className='note-selector-description' key={note.content}>{note.content}</div>
+                  </div>
+                  <div className='divider' key={index + 2}/> 
+                </div> 
+              </div>
             )
           })
         }

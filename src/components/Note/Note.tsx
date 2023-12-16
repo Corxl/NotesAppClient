@@ -60,9 +60,7 @@ export default function Note(props: NoteProps) {
         </DialogActions>
       </Dialog> 
       <div className='note-header'>
-        <div>
-          {note.title}
-        </div>
+        <InputTextarea className={'note-content' + (isEditing ? '  note-editing' : '')} onChange={(e) => setTitle(e.target.value)} value={title} rows={2} autoResize readOnly={!isEditing}/>
         <div className='note-buttons'>
           <IconButton className='note-button' onClick={() => {
             setIsEditing(editing => !editing)
@@ -86,7 +84,7 @@ export default function Note(props: NoteProps) {
         </div>
       </div> 
         <div className='note-content-container'>
-          <InputTextarea className={'note-content' + (isEditing ? '  note-content-editing' : '')} onChange={(e) => setContent(e.target.value)} value={content} rows={10} cols={30} autoResize readOnly={!isEditing}/>
+          <InputTextarea className={'note-content' + (isEditing ? '  note-editing' : '')} onChange={(e) => setContent(e.target.value)} value={content} rows={10} cols={30} autoResize readOnly={!isEditing}/>
       </div>
     </div>
   )
