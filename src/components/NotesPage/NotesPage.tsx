@@ -16,14 +16,15 @@ interface PageNote {
 
 export default function NotesPage() { 
 
-  const [noteIndex, setNoteIndex] = useState(-1)
+  const [noteIndex, setNoteIndex] = useState(-1);
 
   const [notes, setNotes] = useState<PageNote[]>([])
 
   const [loading, setLoading] = useState<boolean>(true)
 
   function createNote() {
-    setNotes([...notes, {title: ('New Notes' + (notes.length > 0 ? ' (' + (notes.length + 1) + ')' : '' )), content: '', id: uuidv4()}])
+    setNotes([...notes, {title: ('New Notes' + (notes.length > 0 ? ' (' + (notes.length + 1) + ')' : '' )), content: '', id: uuidv4()}]);
+    setNoteIndex(notes.length);
   } 
     
 
