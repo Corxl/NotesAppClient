@@ -10,6 +10,16 @@
   gap: 2px;
 }
 
+.list-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+  background-color: var(--primary-background-color);
+  width: 100%;
+  padding: 5px;
+}
+
 .dialogue-window {
   opacity:    1; 
   display: flex;

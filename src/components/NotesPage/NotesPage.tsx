@@ -1,5 +1,11 @@
 
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import { IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -26,6 +32,7 @@ export default function NotesPage() {
   }])
 
   const [loading, setLoading] = useState<boolean>(true)
+  const [editList, setEditList] = useState<boolean>(false)
 
   function createNote() { 
     setNotes([...notes, {title: 'Untitled Note', content: '', id: uuidv4()}]);
@@ -53,6 +60,13 @@ export default function NotesPage() {
     }))
   }
 
+  function deleteSelectedNotes() { 
+    setNotes(notes.filter((_, index) => !notesToDelete.includes(index)));
+    setNotesToDelete([]);
+    setNoteIndex(-1);
+    setEditList(false);
+  }
+
   useEffect(() => { // simulate loading
     if (notes.length > 0) {
       setLoading(false);
@@ -66,6 +80,22 @@ export default function NotesPage() {
   return (
     <div className='notes-container'>
       <div className='notes-list'>
+        <div className='list-actions'> 
+
+          {editList && notesToDelete.length > 0
+          ? 
+          <IconButton onClick={()=> deleteSelectedNotes()} size='small' style={{width: "fit-content",}}>
+            <DeleteIcon style={{width: '30px', height: '30px', color: 'white'}}/>
+          </IconButton> : <></>}
+
+          <IconButton onClick={()=> setEditList(e => !e)} size='small' style={{width: "fit-content",}}>
+              {!editList ? <EditOutlinedIcon style={{width: '30px', height: '30px', color: 'white'}}/> : <EditIcon style={{width: '30px', height: '30px', color: 'white'}}/>}
+          </IconButton> 
+          <IconButton onClick={()=> createNote()} size='small' style={{width: "fit-content",}}>
+            <AddBoxTwoToneIcon style={{width: '30px', height: '30px', color: 'white'}}/>
+          </IconButton> 
+          
+        </div>
         {loading && 
           [...Array(7)].map((_, index) => {
             return (
@@ -81,16 +111,9 @@ export default function NotesPage() {
         {
           notes.map((note, index) => {
             return (
-              <NoteSelector note={note} index={index} setNoteIndex={setNoteIndex} selected={index === noteIndex} key={index} notesToDelete={notesToDelete} setNotesToDelete={setNotesToDelete}/>
+              <NoteSelector note={note} index={index} setNoteIndex={setNoteIndex} selected={index === noteIndex} key={index} notesToDelete={notesToDelete} setNotesToDelete={setNotesToDelete} enableEditCheckbox={editList}/>
             )
           })
-        }
-        {!loading && 
-        <div style={{display: 'flex', flexDirection: "column", width: "100%"}}>
-          <IconButton onClick={()=> createNote()} size='large' style={{width: "fit-content", margin: "auto"}}>
-            <AddCircleOutline style={{width: '30px', height: '30px'}}/>
-          </IconButton> 
-        </div>
         }
       </div> 
 
