@@ -1,11 +1,12 @@
 
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
-import { Checkbox, IconButton, Skeleton } from '@mui/material';
+import { IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Note from '../Note/Note.tsx';
 import { DefaultNotePage } from '../Note/index.js';
+import NoteSelector from './NoteSelector.tsx';
 import './NotesPage.css';
 
 interface PageNote {
@@ -30,6 +31,12 @@ export default function NotesPage() {
     setNotes([...notes, {title: 'Untitled Note', content: '', id: uuidv4()}]);
     setNoteIndex(notes.length);
   } 
+
+  const notesToDelete = useRef<Set<number>>(new Set()); 
+
+  useEffect(() => {
+    console.log(notesToDelete.current);
+  }, [notesToDelete]) 
     
 
   const deleteNote = useCallback((targetIndex: number) => {
@@ -74,17 +81,7 @@ export default function NotesPage() {
         {
           notes.map((note, index) => {
             return (
-              <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
-                <Checkbox />
-                <div style={{gap: "20px",  width: "100%"}} key={index}>
-                  
-                  <div className={'note-selector' + (noteIndex === index ? ' selected' : '')} key={index + 1} onClick={()=> setNoteIndex(index)}>
-                    <div className='note-selector-description' style={{fontSize: "125%"}} key={note.title}>{note.title}</div>
-                    <div className='note-selector-description' key={note.content}>{note.content}</div>
-                  </div>
-                  <div className='divider' key={index + 2}/> 
-                </div> 
-              </div>
+              <NoteSelector note={note} index={index} setNoteIndex={setNoteIndex} selected={index === noteIndex} key={index} notesToDelete={notesToDelete.current}/>
             )
           })
         }
