@@ -8,28 +8,28 @@ interface NoteSelectorProps {
     }
     index: number, 
     setNoteIndex: (index: number) => void,
-    notesToDelete: Set<number>,
+    notesToDelete: number[],
+    setNotesToDelete: (notes: number[]) => void,
     selected: boolean
 }
 
 export default function NoteSelector(props: NoteSelectorProps) {
-    const {note, index, setNoteIndex, selected, notesToDelete} = props;
+    const {note, index, setNoteIndex, selected, setNotesToDelete, notesToDelete} = props;
 
     const [checked, setChecked] = React.useState(false);
 
     useEffect(() => {
         if (checked) {
-            notesToDelete.add(index);
+            setNotesToDelete([...notesToDelete, index]);
         } else {
-            notesToDelete.delete(index);
+            setNotesToDelete(notesToDelete.filter((noteIndex) => noteIndex !== index));
         }
-    }, [checked, notesToDelete, index])
+    }, [checked])
 
     return (
         <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
-            <Checkbox value={checked} onChange={(e)=> setChecked(e.target.checked) }/>
-            <div style={{gap: "20px",  width: "100%"}} >
-                
+            <Checkbox value={checked} onChange={(e)=> setChecked(e.target.checked)}/>
+            <div style={{gap: "20px",  width: "100%"}}> 
                 <div className={'note-selector' + (selected ? ' selected' : '')}  onClick={()=> setNoteIndex(index)}>
                 <div className='note-selector-description' style={{fontSize: "125%"}}>{note.title}</div>
                 <div className='note-selector-description'>{note.content}</div>

@@ -2,7 +2,7 @@
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import { IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Note from '../Note/Note.tsx';
 import { DefaultNotePage } from '../Note/index.js';
@@ -12,8 +12,8 @@ import './NotesPage.css';
 interface PageNote {
   title: string,
   content: string,
-  id: typeof uuidv4
-} 
+  id: typeof uuidv4 
+}
 
 export default function NotesPage() { 
 
@@ -32,10 +32,10 @@ export default function NotesPage() {
     setNoteIndex(notes.length);
   } 
 
-  const notesToDelete = useRef<Set<number>>(new Set()); 
+  const [notesToDelete, setNotesToDelete] = useState<number[]>([]); 
 
   useEffect(() => {
-    console.log(notesToDelete.current);
+    console.log(notesToDelete);
   }, [notesToDelete]) 
     
 
@@ -81,7 +81,7 @@ export default function NotesPage() {
         {
           notes.map((note, index) => {
             return (
-              <NoteSelector note={note} index={index} setNoteIndex={setNoteIndex} selected={index === noteIndex} key={index} notesToDelete={notesToDelete.current}/>
+              <NoteSelector note={note} index={index} setNoteIndex={setNoteIndex} selected={index === noteIndex} key={index} notesToDelete={notesToDelete} setNotesToDelete={setNotesToDelete}/>
             )
           })
         }
