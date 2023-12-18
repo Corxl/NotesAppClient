@@ -12,10 +12,11 @@ import { DefaultNotePage } from '../Note/index.js';
 import NoteSelector from './NoteSelector.tsx';
 import './NotesPage.css';
 
-interface PageNote {
+export interface PageNote {
   title: string,
   content: string,
-  id: typeof uuidv4 
+  hasSaved?: boolean,
+  id: typeof uuidv4
 }
 
 export default function NotesPage() { 
@@ -25,7 +26,8 @@ export default function NotesPage() {
   const [notes, setNotes] = useState<PageNote[]>([{
     title: 'Welcome to Notes App!',
     content: 'Click the button below to create a new note!',
-    id: uuidv4()
+    id: uuidv4(),
+    hasSaved: false,
   }])
 
   const [loading, setLoading] = useState<boolean>(true)
@@ -50,7 +52,7 @@ export default function NotesPage() {
   function updateNote (index: number, newNote: {title: string, content: string}) {
     setNotes(notes.map((note, nIndex) => { 
       if (nIndex === index) {
-        return {title: newNote.title, content: newNote.content, id: note.id};
+        return {title: newNote.title, content: newNote.content, id: note.id, hasSaved: true};
       } else {
         return note;
       }
@@ -72,6 +74,7 @@ export default function NotesPage() {
      setTimeout(() => {
       setLoading(false);
      }, 2500);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])  
 
   return (

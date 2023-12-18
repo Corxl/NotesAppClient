@@ -7,13 +7,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { v4 as uuidv4 } from 'uuid';
 import './Note.css';
+import { PageNote } from '../NotesPage/NotesPage';
 
 interface NoteProps {
-  note: {
-    title: string,
-    content: string,
-    id: typeof uuidv4
-  },
+  note: PageNote,
   index: number,
   onDelete: (id: typeof uuidv4) => void,
   updateNote: (id: typeof uuidv4, note: {title: string, content: string}) => void
@@ -28,17 +25,20 @@ export default function Note(props: NoteProps) {
 
   const [saveConfirm, setSaveConfirm] = useState(false);
 
-  const refreshPage = useCallback(() => {
-    setIsEditing(false); 
+  const refreshPage = useCallback(() => { 
     setTitle(note.title);
     setContent(note.content);
-  }, [note.title, note.content]);
-
+    
+  }, [note.title, note.content]); 
   function saveNote() {
     updateNote(index, {title: title, content: content});
     setIsEditing(editing => !editing);
     refreshPage();
   } 
+
+  useEffect(() => {
+    setIsEditing(note.hasSaved === undefined || note.hasSaved === false); 
+  }, [note.hasSaved])
 
 
   useEffect(() => {
