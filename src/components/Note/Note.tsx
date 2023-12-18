@@ -38,7 +38,8 @@ export default function Note(props: NoteProps) {
     updateNote(index, {title: title, content: content});
     setIsEditing(editing => !editing);
     refreshPage();
-  }
+  } 
+
 
   useEffect(() => {
     refreshPage();

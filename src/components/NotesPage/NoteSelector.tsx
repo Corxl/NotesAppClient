@@ -27,10 +27,17 @@ export default function NoteSelector(props: NoteSelectorProps) {
         }
     }, [checked])
 
+
+    useEffect(() => {
+        if (notesToDelete.length === 0) {
+            setChecked(false);
+        }      
+    }, [notesToDelete])
+
     return (
         <>
             <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
-                {enableEditCheckbox ? <Checkbox value={checked} onChange={(e)=> setChecked(e.target.checked)}/> : <></>}
+                {enableEditCheckbox ? <Checkbox checked={checked} value={checked} onChange={(e)=> setChecked(e.target.checked)}/> : <></>}
                 <div style={{gap: "20px",  width: "100%"}}> 
                 <div className={'note-selector' + (selected ? ' selected' : '')}  onClick={()=> setNoteIndex(index)}>
                     <div className='note-selector-description' style={{fontSize: "125%"}}>{note.title}</div>

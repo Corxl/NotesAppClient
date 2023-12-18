@@ -1,11 +1,8 @@
 
-import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
+import EditIcon from '@mui/icons-material/Edit';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -35,7 +32,7 @@ export default function NotesPage() {
   const [editList, setEditList] = useState<boolean>(false)
 
   function createNote() { 
-    setNotes([...notes, {title: 'Untitled Note', content: '', id: uuidv4()}]);
+    setNotes(ns => [...ns, {title: 'Untitled Note', content: ns.length.toString(), id: uuidv4()}]);
     setNoteIndex(notes.length);
   } 
 
@@ -82,7 +79,7 @@ export default function NotesPage() {
       <div className='notes-list'>
         <div className='list-actions'> 
 
-          {editList && notesToDelete.length > 0
+          {editList === true && notesToDelete.length > 0
           ? 
           <IconButton onClick={()=> deleteSelectedNotes()} size='small' style={{width: "fit-content",}}>
             <DeleteIcon style={{width: '30px', height: '30px', color: 'white'}}/>
