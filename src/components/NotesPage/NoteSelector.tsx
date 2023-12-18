@@ -25,6 +25,7 @@ export default function NoteSelector(props: NoteSelectorProps) {
         } else {
             setNotesToDelete(notesToDelete.filter((noteIndex) => noteIndex !== index));
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [checked])
 
 
