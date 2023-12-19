@@ -1,0 +1,40 @@
+ .selected {
+  background-color: var(--primary-background-color); 
+  color: grey;
+  user-select: none;
+} 
+
+.note-selector {
+  display: flex;
+  flex-direction: column; 
+  padding: 5px;
+
+}
+
+.note-selector:hover {
+  cursor: pointer;
+  background-color: var(--primary-background-color); 
+  color: grey;
+  user-select: none; 
+}
+
+.note-selector-title {
+  font-size: 150%;
+} 
+
+.divider {
+    background-color: black;
+    opacity: 0.30;
+    color: black;
+    height: 2px;
+    width: 100%;
+}
+
+.note-selector-description {
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+}
