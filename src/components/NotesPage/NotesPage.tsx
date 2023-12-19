@@ -3,7 +3,7 @@ import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { IconButton, Skeleton } from '@mui/material';
+import { Button, IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -115,6 +115,7 @@ export default function NotesPage() {
             )
           })
         }
+        <Button content='Refresh'/>
       </div> 
 
       {noteIndex >= 0 ? <Note note={notes[noteIndex]} index={noteIndex} onDelete={deleteNote} updateNote={updateNote}/> : <DefaultNotePage addNewNote={createNote}/>}

@@ -1,5 +1,6 @@
 import { Checkbox } from '@mui/material';
 import React, { useEffect } from 'react';
+import './NoteSelector.css';
 
 interface NoteSelectorProps {
     note: {
@@ -38,7 +39,7 @@ export default function NoteSelector(props: NoteSelectorProps) {
     return (
         <>
             <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
-                {enableEditCheckbox ? <Checkbox checked={checked} value={checked} onChange={(e)=> setChecked(e.target.checked)}/> : <></>}
+                {enableEditCheckbox ? <Checkbox checked={checked} value={checked} color='default' onChange={(e)=> setChecked(e.target.checked)}/> : <></>}
                 <div style={{gap: "20px",  width: "100%"}}> 
                 <div className={'note-selector' + (selected ? ' selected' : '')}  onClick={()=> setNoteIndex(index)}>
                     <div className='note-selector-description' style={{fontSize: "125%"}}>{note.title}</div>
