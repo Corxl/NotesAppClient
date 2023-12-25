@@ -1,10 +1,10 @@
 
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { AccountPage } from './components/Account';
 import { Navbar } from './components/NavBar';
-import { NotesPage } from './components/NotesPage';
-import { Routes, Route, HashRouter } from 'react-router-dom';
-import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import { NotesPage } from './components/Notes/NotesPage';
 
 function App() { 
   return (

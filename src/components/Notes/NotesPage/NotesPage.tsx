@@ -7,10 +7,11 @@ import { Button, IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import Note from '../Note/Note.tsx';
-import { DefaultNotePage } from '../Note/index.js';
-import NoteSelector from './NoteSelector.tsx';
+import Note from '../NoteContent/Note.tsx';
+import { DefaultNotePage } from '../NoteContent/index.js';
+import NoteList from '../NoteList/NoteList.tsx';
 import './NotesPage.css';
+
 
 export interface PageNote {
   title: string,
@@ -107,14 +108,8 @@ export default function NotesPage() {
             </div>
             )
           })
-        }
-        {
-          notes.map((note, index) => {
-            return (
-              <NoteSelector note={note} index={index} setNoteIndex={setNoteIndex} selected={index === noteIndex} key={index} notesToDelete={notesToDelete} setNotesToDelete={setNotesToDelete} enableEditCheckbox={editList}/>
-            )
-          })
-        }
+        } 
+        <NoteList />
         <Button content='Refresh'/>
       </div> 
 
