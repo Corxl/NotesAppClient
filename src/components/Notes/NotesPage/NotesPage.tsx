@@ -31,8 +31,6 @@ export default function NotesPage() {
     hasSaved: false,
   }])
 
-  const [loading, setLoading] = useState<boolean>(true)
-  const [editList, setEditList] = useState<boolean>(false)
 
   function createNote() { 
     setNotes(ns => [...ns, {title: 'Untitled Note', content: ns.length.toString(), id: uuidv4()}]);
@@ -60,27 +58,13 @@ export default function NotesPage() {
     }))
   }
 
-  function deleteSelectedNotes() { 
-    setNotes(notes.filter((_, index) => !notesToDelete.includes(index)));
-    setNotesToDelete([]);
-    setNoteIndex(-1);
-    setEditList(false);
-  }
+  
 
-  useEffect(() => { // simulate loading
-    if (notes.length > 0) {
-      setLoading(false);
-      return;
-    }
-     setTimeout(() => {
-      setLoading(false);
-     }, 2500);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])  
+  
 
   return (
     <div className='notes-container'>
-      <div className='notes-list'>
+      {/* <div className='notes-list'>
         <div className='list-actions'> 
 
           {editList === true && notesToDelete.length > 0
@@ -111,7 +95,8 @@ export default function NotesPage() {
         } 
         <NoteList />
         <Button content='Refresh'/>
-      </div> 
+      </div>  */}
+      <NoteList createNote={createNote} notes={notes} setNotes={setNotes} setNoteIndex={setNoteIndex} noteIndex={noteIndex} setNotesToDelete={setNotesToDelete} notesToDelete={notesToDelete}/>
 
       {noteIndex >= 0 ? <Note note={notes[noteIndex]} index={noteIndex} onDelete={deleteNote} updateNote={updateNote}/> : <DefaultNotePage addNewNote={createNote}/>}
     </div>
