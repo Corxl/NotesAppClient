@@ -2,7 +2,7 @@
 import 'primeicons/primeicons.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import Note from '../NoteContent/Note.tsx';
+import NoteContent from '../NoteContent/NoteContent.tsx';
 import { DefaultNotePage } from '../NoteContent/index.js';
 import NoteList from '../NoteList/NoteList.tsx';
 import './NotesPage.css';
@@ -61,7 +61,7 @@ export default function NotesPage() {
     <div className='notes-container'>
       <NoteList createNote={createNote} notes={notes} setNotes={setNotes} setNoteIndex={setNoteIndex} noteIndex={noteIndex} setNotesToDelete={setNotesToDelete} notesToDelete={notesToDelete}/>
 
-      {noteIndex >= 0 ? <Note note={notes[noteIndex]} index={noteIndex} onDelete={deleteNote} updateNote={updateNote}/> : <DefaultNotePage addNewNote={createNote}/>}
+      {noteIndex >= 0 ? <NoteContent note={notes[noteIndex]} index={noteIndex} onDelete={deleteNote} updateNote={updateNote}/> : <DefaultNotePage addNewNote={createNote}/>}
     </div>
   )
 }

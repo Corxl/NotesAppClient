@@ -6,8 +6,8 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { v4 as uuidv4 } from 'uuid';
-import './Note.css';
 import { PageNote } from '../NotesPage/NotesPage';
+import './NoteContent.css';
 
 interface NoteProps {
   note: PageNote,
@@ -16,7 +16,7 @@ interface NoteProps {
   updateNote: (id: typeof uuidv4, note: {title: string, content: string}) => void
 }
 
-export default function Note(props: NoteProps) {
+export default function NoteContent(props: NoteProps) {
   const {note, /*onDelete, */ updateNote, index} = props; 
 
   const [title, setTitle] = useState(note.title);
