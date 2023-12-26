@@ -1,11 +1,12 @@
-import { Button, IconButton, Skeleton } from '@mui/material';
-import './NoteList.css';
 import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined'; 
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { Button, IconButton, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import NoteSelector from '../NoteSelector/NoteSelector.tsx';
 import { PageNote } from '../NotesPage/NotesPage';
+import './NoteList.css';
 
 interface NoteListProps {
   notes: PageNote[],
@@ -40,6 +41,8 @@ export default function NoteList(props: NoteListProps) {
 		setNoteIndex(-1);
 		setEditList(false);
 	} 
+	
+	console.log(notesToDelete.length)
   return (
 		<div className="notes-list">
 			<div className="list-actions">
@@ -119,7 +122,21 @@ export default function NoteList(props: NoteListProps) {
 						</div>
 					);
 				})}
-								<Button content="Refresh" />
+			{notes.map((note, index) => {
+				return (
+					<NoteSelector
+						note={note}
+						index={index}
+						setNoteIndex={setNoteIndex}
+						selected={index === noteIndex}
+						key={index}
+						notesToDelete={notesToDelete}
+						setNotesToDelete={setNotesToDelete}
+						enableEditCheckbox={editList}
+					/>
+				);
+			})}
+			<Button content="Refresh" />
 		</div>
 	);
 }

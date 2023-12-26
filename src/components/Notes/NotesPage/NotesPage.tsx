@@ -1,9 +1,4 @@
 
-import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { Button, IconButton, Skeleton } from '@mui/material';
 import 'primeicons/primeicons.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -64,38 +59,6 @@ export default function NotesPage() {
 
   return (
     <div className='notes-container'>
-      {/* <div className='notes-list'>
-        <div className='list-actions'> 
-
-          {editList === true && notesToDelete.length > 0
-          ? 
-          <IconButton onClick={()=> deleteSelectedNotes()} size='small' style={{width: "fit-content",}}>
-            <DeleteIcon style={{width: '30px', height: '30px', color: 'white'}}/>
-          </IconButton> : <></>}
-
-          <IconButton onClick={()=> setEditList(e => !e)} size='small' style={{width: "fit-content",}}>
-              {!editList ? <EditOutlinedIcon style={{width: '30px', height: '30px', color: 'white'}}/> : <EditIcon style={{width: '30px', height: '30px', color: 'white'}}/>}
-          </IconButton> 
-          <IconButton onClick={()=> createNote()} size='small' style={{width: "fit-content",}}>
-            <AddBoxTwoToneIcon style={{width: '30px', height: '30px', color: 'white'}}/>
-          </IconButton> 
-          
-        </div>
-        {loading && 
-          [...Array(7)].map((_, index) => {
-            return (
-            <div style={{display: "flex", flexDirection: "column", width: "100%", height: "auto", gap: "10px", padding: "5px"}} key={index}>
-              <Skeleton variant='rectangular' width='70%' height='15px' animation='wave' />
-              <Skeleton variant='rectangular' width='90%' height='10px' animation='wave' />
-              <Skeleton variant='rectangular' width='85%' height='10px' animation='wave' />
-              <Skeleton variant='rectangular' width='100%' height='5px' animation='wave' />
-            </div>
-            )
-          })
-        } 
-        <NoteList />
-        <Button content='Refresh'/>
-      </div>  */}
       <NoteList createNote={createNote} notes={notes} setNotes={setNotes} setNoteIndex={setNoteIndex} noteIndex={noteIndex} setNotesToDelete={setNotesToDelete} notesToDelete={notesToDelete}/>
 
       {noteIndex >= 0 ? <Note note={notes[noteIndex]} index={noteIndex} onDelete={deleteNote} updateNote={updateNote}/> : <DefaultNotePage addNewNote={createNote}/>}
