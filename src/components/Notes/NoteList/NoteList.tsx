@@ -5,7 +5,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Button, IconButton, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import NoteSelector from '../NoteSelector/NoteSelector.tsx';
-import { NotesPageActions, NotesPageState } from '../NotesPage/NotesPage';
+import { NotesPageActions, NotesPageState } from '../notesReducer.tsx';
 import './NoteList.css';
 
 interface NoteListProps {
