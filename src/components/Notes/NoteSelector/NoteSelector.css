@@ -1,5 +1,5 @@
- .selected {
-  background-color: var(--primary-background-color); 
+.selected {
+background-color: var(--primary-background-color); 
   color: grey;
   user-select: none;
 } 

@@ -5,19 +5,17 @@ import { Button, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/mat
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
-import { v4 as uuidv4 } from 'uuid';
-import { PageNote } from '../NotesPage/NotesPage';
+import { NotesPageActions, NotesPageState } from '../NotesPage/NotesPage';
 import './NoteContent.css';
 
 interface NoteProps {
-  note: PageNote,
-  index: number,
-  onDelete: (id: typeof uuidv4) => void,
-  updateNote: (id: typeof uuidv4, note: {title: string, content: string}) => void
+	notesState: NotesPageState;
+  notesDispatch: React.Dispatch<NotesPageActions>;
 }
 
 export default function NoteContent(props: NoteProps) {
-  const {note, /*onDelete, */ updateNote, index} = props; 
+  const {notesState, notesDispatch} = props; 
+  const note  = notesState.notes[notesState.noteIndex];
 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content); 
@@ -31,9 +29,9 @@ export default function NoteContent(props: NoteProps) {
     
   }, [note.title, note.content]); 
   function saveNote() {
-    updateNote(index, {title: title, content: content});
+    notesDispatch({type: 'UPDATE_NOTE', payload: {index: notesState.noteIndex, newNote: {title: title, content: content}}})
     setIsEditing(editing => !editing);
-    refreshPage();
+    refreshPage(); 
   } 
 
   useEffect(() => {
@@ -43,7 +41,8 @@ export default function NoteContent(props: NoteProps) {
 
   useEffect(() => {
     refreshPage();
-  }, [note, refreshPage])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notesState])
 
   return (
     <div className='note'>

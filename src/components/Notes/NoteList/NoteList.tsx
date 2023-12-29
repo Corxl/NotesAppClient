@@ -5,27 +5,26 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Button, IconButton, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import NoteSelector from '../NoteSelector/NoteSelector.tsx';
-import { PageNote } from '../NotesPage/NotesPage';
+import { NotesPageActions, NotesPageState } from '../NotesPage/NotesPage';
 import './NoteList.css';
 
 interface NoteListProps {
-  notes: PageNote[],
-  setNotes: React.Dispatch<React.SetStateAction<PageNote[]>>,
-  noteIndex: number,
-  setNoteIndex: React.Dispatch<React.SetStateAction<number>>,
-  notesToDelete: number[],
-  setNotesToDelete: React.Dispatch<React.SetStateAction<number[]>>, 
-  createNote: () => void,
+  notesState: NotesPageState,
+  notesDispatch: React.Dispatch<NotesPageActions>
 }
 
 export default function NoteList(props: NoteListProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [editList, setEditList] = useState<boolean>(false);
-  const { notes, setNotes, noteIndex, setNoteIndex, notesToDelete, setNotesToDelete, createNote } = props
+//   const { notes, setNotes, noteIndex, setNoteIndex, notesToDelete, setNotesToDelete, createNote } = props
+  const  {notesState, notesDispatch}  = props;
+
+  console.log(notesState.notesToDelete)
+  console.log(notesState.notes)
   
    useEffect(() => {
 		// simulate loading
-		if (notes.length > 0) {
+		if (notesState.notes.length > 0) {
 			setLoading(false);
 			return;
 		}
@@ -33,22 +32,13 @@ export default function NoteList(props: NoteListProps) {
 			setLoading(false);
 		}, 2500);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []); 
-
-  function deleteSelectedNotes() {
-		setNotes(notes.filter((_, index) => !notesToDelete.includes(index)));
-		setNotesToDelete([]);
-		setNoteIndex(-1);
-		setEditList(false);
-	} 
-	
-	console.log(notesToDelete.length)
+	}, []); 	
   return (
 		<div className="notes-list">
 			<div className="list-actions">
-				{editList === true && notesToDelete.length > 0 ? (
+				{editList === true && notesState.notes.length > 0 ? (
 					<IconButton
-						onClick={() => deleteSelectedNotes()}
+						onClick={() => notesDispatch({type: 'CLEAR_NOTES_TO_DELETE'})}
 						size="small"
 						style={{ width: 'fit-content' }}>
 						<DeleteIcon
@@ -74,7 +64,7 @@ export default function NoteList(props: NoteListProps) {
 					)}
 				</IconButton>
 				<IconButton
-					onClick={() => createNote()}
+					onClick={() => notesDispatch({type: 'CREATE_NOTE'})}
 					size="small"
 					style={{ width: 'fit-content' }}>
 					<AddBoxTwoToneIcon
@@ -122,18 +112,9 @@ export default function NoteList(props: NoteListProps) {
 						</div>
 					);
 				})}
-			{notes.map((note, index) => {
+			{notesState.notes.map((note, index) => {
 				return (
-					<NoteSelector
-						note={note}
-						index={index}
-						setNoteIndex={setNoteIndex}
-						selected={index === noteIndex}
-						key={index}
-						notesToDelete={notesToDelete}
-						setNotesToDelete={setNotesToDelete}
-						enableEditCheckbox={editList}
-					/>
+					<NoteSelector notesState={notesState} notesDispatch={notesDispatch} enableEditCheckbox={editList} index={index}/> 
 				);
 			})}
 			<Button content="Refresh" />

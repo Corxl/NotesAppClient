@@ -1,17 +1,17 @@
 
-import AddCircleOutline from "@mui/icons-material/AddCircleOutline"
-import { IconButton } from "@mui/material"
-import React from "react"
+import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
+import { IconButton } from "@mui/material";
+import React from "react";
+import { NotesPageActions } from "../NotesPage/NotesPage";
 
 interface Props {
-  addNewNote: () => void
+	notesDispatch: React.Dispatch<NotesPageActions>; 
 }
 
-export default function NoteEmpty(props: Props) {
-  const { addNewNote } = props
+export default function NoteEmpty({notesDispatch}: Props) {
   return (
     <div className='note note-empty'>
-      <IconButton onClick={()=> addNewNote()} >
+      <IconButton onClick={()=> notesDispatch({type: 'CREATE_NOTE'})} >
           <AddCircleOutline />
       </IconButton>
       <div className='note-empty-text'>
