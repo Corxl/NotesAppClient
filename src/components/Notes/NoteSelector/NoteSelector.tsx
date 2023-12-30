@@ -1,6 +1,6 @@
 import { Checkbox } from '@mui/material';
 import React, { useEffect } from 'react';
-import { NotesPageActions, NotesPageState } from '../NotesPage/NotesPage';
+import { NotesPageActions, NotesPageState } from '../notesReducer.tsx';
 import './NoteSelector.css';
 
 interface NoteSelectorProps {

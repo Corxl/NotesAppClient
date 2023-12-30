@@ -5,8 +5,9 @@ import { Button, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/mat
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
-import { NotesPageActions, NotesPageState } from '../NotesPage/NotesPage';
+import { NotesPageActions, NotesPageState } from '../notesReducer.tsx';
 import './NoteContent.css';
+
 
 interface NoteProps {
 	notesState: NotesPageState;
