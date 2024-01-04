@@ -88,6 +88,6 @@ export function notesPageReducer(
 				noteIndex: -1,
 			};
 		default:
-			return {...state};
+			return state; 
 	}
 }

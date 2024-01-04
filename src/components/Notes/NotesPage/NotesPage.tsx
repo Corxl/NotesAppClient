@@ -1,4 +1,3 @@
-
 import 'primeicons/primeicons.css';
 import React, { useReducer } from 'react';
 import NoteContent from '../NoteContent/NoteContent.tsx';
