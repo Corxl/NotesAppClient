@@ -1,5 +1,5 @@
-import { PageNote } from "./NotesPage/NotesPage";
 import { v4 as uuidv4 } from 'uuid';
+import { PageNote } from "./NotesPage/NotesPage";
 
 
 export type NotesPageState = {
@@ -32,7 +32,7 @@ export type NotesPageActions =
 export function notesPageReducer(
 	state: NotesPageState,
 	action: NotesPageActions
-) {
+) : NotesPageState {
 	switch (action.type) {
 		case 'CREATE_NOTE':
 			return {
@@ -84,10 +84,10 @@ export function notesPageReducer(
 				notes: state.notes.filter(
 					(_, index) => !state.notesToDelete.includes(index)
 				),
-				notesToDelete: [],
+				notesToDelete: [] as number[],
 				noteIndex: -1,
 			};
 		default:
-			return state;
+			return {...state};
 	}
 }
