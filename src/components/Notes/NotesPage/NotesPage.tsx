@@ -1,5 +1,7 @@
 import 'primeicons/primeicons.css';
-import React, { useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LoginContext } from '../../../context/LoginContext.tsx';
 import NoteContent from '../NoteContent/NoteContent.tsx';
 import { DefaultNotePage } from '../NoteContent/index.js';
 import NoteList from '../NoteList/NoteList.tsx';
@@ -16,9 +18,17 @@ export interface PageNote {
 export default function NotesPage() { 
   const [state, dispatch] = useReducer(notesPageReducer, {
     notes: [], 
-    noteIndex: -1, 
+    noteIndex: -1, // replace with URL params for index
     notesToDelete: []
   }); 
+  const { isLoggedIn } = useContext(LoginContext); 
+  const navigator = useNavigate(); 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigator('/login');
+    } 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className='notes-container'>
       <NoteList notesState={state} notesDispatch={dispatch} />
