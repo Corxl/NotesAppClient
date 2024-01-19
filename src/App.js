@@ -5,44 +5,59 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { AccountPage } from './components/Account';
 import Login from './components/Login/Login.tsx';
-import { Navbar } from './components/NavBar';
 import { NotesPage } from './components/Notes/NotesPage';
 import { LoginContext } from './context/LoginContext.tsx';
 
+export async function checkAuth() {
+	let auth = true;
+	await axios
+		.get('http://localhost:3001/users/isAuth')
+		.then((res) => { 
+			console.log(res);
+			auth = true;
+		})
+		.catch((err) => {
+			console.log(err);
+			auth = false;
+		});
+	return auth;
+}
 
 function App() { 
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false); 
 	axios.defaults.withCredentials = true; 
-	async function handleLogin() {
-		await axios.post('http://localhost:3001/users/login',
-			{ 
-				username: 'test',
-				password: 'test', 
-			}).then((res) => {
-			console.log(res);
-			setIsLoggedIn(true);
-		}
-		).catch((err) => {
-			console.log(err);
-			setIsLoggedIn(false);
-		});
-	} 
-	async function handleProtected() {
-		await axios.get('http://localhost:3001/users/protected').then((res) => {
-			console.log(res);
-			// setIsLoggedIn(true);
-		}
-		).catch((err) => {
-			console.log(err);
-			// setIsLoggedIn(false);
-		});
-	}
+	// async function handleLogin() {
+	// 	await axios.post('http://localhost:3001/users/login',
+	// 		{ 
+	// 			username: 'test',
+	// 			password: 'test', 
+	// 		}).then((res) => {
+	// 		console.log(res);
+	// 		setIsLoggedIn(true);
+	// 	}
+	// 	).catch((err) => {
+	// 		console.log(err);
+	// 		setIsLoggedIn(false);
+	// 	});
+	// } 
+	// async function handleProtected() {
+	// 	await axios.get('http://localhost:3001/users/protected').then((res) => {
+	// 		console.log(res);
+	// 		// setIsLoggedIn(true);
+	// 	}
+	// 	).catch((err) => {
+	// 		console.log(err);
+	// 		// setIsLoggedIn(false);
+	// 	});
+	// }
 	// useEffect(() => {
 	// 	handleLogin();
 // 	handleProtected();
-	// }, []);
-
+	// }, []); 
+	useEffect(() => {
+		checkAuth();
+	} , []);
 
     return (
 			<LoginContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
@@ -54,30 +69,7 @@ function App() {
 							<Route path="/dashboard" element={<NotesPage />} />
 							<Route path="/account" element={<AccountPage />} />
 						</Routes> 
-					</div>
-						{/* <div className="App"> 
-					{isLoggedIn ? (
-						<>
-							<Navbar />
-							<Routes>
-								<Route index element={<Navigate to={'/dashboard'} />} />
-								<Route path="/dashboard" element={<NotesPage />} />
-								<Route path="/account" element={<AccountPage />} />
-							</Routes>
-						</>
-					) : (
-						<Routes>
-							<Route index element={<Navigate to={'/login'} />} />
-							<Route path="/login" element={<Login />} />
-						</Routes>
-					)}
-					{/* <>
-					<Navbar />
-					<Routes> 
-						<Route path="/" element={<NotesPage />} />
-						<Route path="/account" element={<AccountPage />} />
-					</Routes>
-				</> */} 
+					</div>  
 				</HashRouter>
 			</LoginContext.Provider>
 		);
