@@ -7,6 +7,7 @@ import { DefaultNotePage } from '../NoteContent/index.js';
 import NoteList from '../NoteList/NoteList.tsx';
 import { notesPageReducer } from '../notesReducer.tsx';
 import './NotesPage.css';
+import Navbar from '../../NavBar/Navbar.tsx';
 
 export interface PageNote {
 	title: string;
@@ -30,10 +31,17 @@ export default function NotesPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className='notes-container'>
-      <NoteList notesState={state} notesDispatch={dispatch} />
+		<>
+			<Navbar />
+			<div className="notes-container">
+				<NoteList notesState={state} notesDispatch={dispatch} />
 
-      {state.noteIndex >= 0 ? <NoteContent notesState={state} notesDispatch={dispatch}/> : <DefaultNotePage notesDispatch={dispatch}/>}
-    </div>
-  )
+				{state.noteIndex >= 0 ? (
+					<NoteContent notesState={state} notesDispatch={dispatch} />
+				) : (
+					<DefaultNotePage notesDispatch={dispatch} />
+				)}
+			</div>
+		</>
+	);
 }

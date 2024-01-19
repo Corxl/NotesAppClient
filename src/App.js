@@ -12,7 +12,7 @@ import { LoginContext } from './context/LoginContext.tsx';
 
 function App() { 
 
-	const [isLoggedIn, setIsLoggedIn] = useState(true); 
+	const [isLoggedIn, setIsLoggedIn] = useState(false); 
 	axios.defaults.withCredentials = true; 
 	async function handleLogin() {
 		await axios.post('http://localhost:3001/users/login',
@@ -21,13 +21,13 @@ function App() {
 				password: 'test', 
 			}).then((res) => {
 			console.log(res);
-			// setIsLoggedIn(true);
+			setIsLoggedIn(true);
 		}
 		).catch((err) => {
 			console.log(err);
-			// setIsLoggedIn(false);
+			setIsLoggedIn(false);
 		});
-	}
+	} 
 	async function handleProtected() {
 		await axios.get('http://localhost:3001/users/protected').then((res) => {
 			console.log(res);
@@ -38,16 +38,24 @@ function App() {
 			// setIsLoggedIn(false);
 		});
 	}
-	useEffect(() => {
-		handleLogin();
-		handleProtected();
-	}, []);
+	// useEffect(() => {
+	// 	handleLogin();
+// 	handleProtected();
+	// }, []);
 
 
     return (
-		<LoginContext.Provider value={{isLoggedIn, setIsLoggedIn}}>
-			<HashRouter>
-				<div className="App">
+			<LoginContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+				<HashRouter>
+					<div className="App">
+						<Routes>
+							<Route index element={<Navigate to={'/login'} />} />
+							<Route path="/login" element={<Login />} />
+							<Route path="/dashboard" element={<NotesPage />} />
+							<Route path="/account" element={<AccountPage />} />
+						</Routes> 
+					</div>
+						{/* <div className="App"> 
 					{isLoggedIn ? (
 						<>
 							<Navbar />
@@ -69,11 +77,10 @@ function App() {
 						<Route path="/" element={<NotesPage />} />
 						<Route path="/account" element={<AccountPage />} />
 					</Routes>
-				</> */}
-				</div>
-			</HashRouter>
-		</LoginContext.Provider>
-	);
+				</> */} 
+				</HashRouter>
+			</LoginContext.Provider>
+		);
 }
 
 export default App;

@@ -22,36 +22,70 @@ export default function Navbar() {
 
   const accountOptions = useRef<OverlayPanel>(null);
   const [currentPageName, setCurrentPageName] = useState(pages[0]) 
-  const { setIsLoggedIn } = useContext(LoginContext)
+  const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext)
   const navigation = useNavigate()
   const navigateTo = (path: string) => {
     navigation(path)
     setCurrentPageName(pages.find(page => page.path === path)!)
   }
   return (
-    <div className='navbar-menu'> 
-      <div className='main-navbar-items'>
-        {pages.map((page, index) => {
-        return (
-          <button
-            className={'navbar-menu-item' + (currentPageName.name === page.name ? ' navbar-menu-item-selected' : '')} 
-            key={index} 
-            onClick={()=>{navigateTo(page.path)}} 
-            style={{cursor: 'pointer'}}
-          >{page.name}</button> 
-        )
-      })}
-      </div>
-      <Avatar label='?' className='account-avatar' onClick={(e) => accountOptions.current?.toggle(e)}/>
-      <OverlayPanel ref={accountOptions}> 
-        <div className='account-options'>
-          <Button label='Signup' className='account-option' onClick={()=>{navigateTo('/account')}}/>
-          <Button label='Log Out' className='account-option' onClick={()=>{
-            navigateTo('/login');
-            setIsLoggedIn(false);
-            }}/>
-        </div>
-      </OverlayPanel>
-    </div>
-  )
+		<div className="navbar-menu">
+			<div className="main-navbar-items">
+				{pages.map((page, index) => {
+					return (
+						<button
+							className={
+								'navbar-menu-item' +
+								(currentPageName.name === page.name
+									? ' navbar-menu-item-selected'
+									: '')
+							}
+							key={index}
+							onClick={() => {
+								navigateTo(page.path);
+							}}
+							style={{ cursor: 'pointer' }}>
+							{page.name}
+						</button>
+					);
+				})}
+			</div>
+			<Avatar
+				label="?"
+				className="account-avatar"
+				onClick={(e) => accountOptions.current?.toggle(e)}
+			/>
+			<OverlayPanel ref={accountOptions}>
+				<div className="account-options">
+					{!isLoggedIn ? (
+						<>
+							<Button
+								label="Sign Up"
+								className="account-option"
+								onClick={() => {
+									navigateTo('/account');
+								}}
+							/>
+							<Button
+								label="Sign In"
+								className="account-option"
+								onClick={() => {
+									navigateTo('/account');
+								}}
+							/>
+						</>
+					) : (
+            <Button
+              label="Log Out"
+              className="account-option"
+              onClick={() => {
+                navigateTo('/login');
+                setIsLoggedIn(false);
+              }}
+            /> 
+          )}
+				</div>
+			</OverlayPanel>
+		</div>
+	);
 }
