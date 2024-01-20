@@ -8,26 +8,15 @@ import Login from './components/Login/Login.tsx';
 import { NotesPage } from './components/Notes/NotesPage';
 import { LoginContext } from './context/LoginContext.tsx';
 import RequireLogin from './components/RequireLogin/RequireLogin.tsx';
+import { useLogin } from './hooks/useLogin.tsx';
 
-export async function checkAuth() {
-	let auth = true;
-	await axios
-		.get('http://localhost:3001/users/isAuth')
-		.then((res) => { 
-			console.log(res);
-			auth = true;
-		})
-		.catch((err) => {
-			console.log(err);
-			auth = false;
-		});
-	return auth;
-}
+
 
 function App() { 
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false); 
 	axios.defaults.withCredentials = true; 
+	const { checkAuth } = useLogin();
 	// async function handleLogin() {
 	// 	await axios.post('http://localhost:3001/users/login',
 	// 		{ 
@@ -57,7 +46,9 @@ function App() {
 // 	handleProtected();
 	// }, []); 
 	useEffect(() => {
-		checkAuth();
+		(async ()=>{
+			await checkAuth();
+		})()
 	} , []);
 
     return (

@@ -5,6 +5,7 @@ import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../context/LoginContext.tsx';
 import './Navbar.css';
+import { useLogin } from '../../hooks/useLogin.tsx';
 
 
 export default function Navbar() {
@@ -23,6 +24,7 @@ export default function Navbar() {
   const accountOptions = useRef<OverlayPanel>(null);
   const [currentPageName, setCurrentPageName] = useState(pages[0]) 
   const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext)
+  const { logout } = useLogin()
   const navigation = useNavigate()
   const navigateTo = (path: string) => {
     navigation(path)
@@ -79,6 +81,7 @@ export default function Navbar() {
               label="Log Out"
               className="account-option"
               onClick={() => {
+				logout();
                 navigateTo('/login');
                 setIsLoggedIn(false);
               }}
