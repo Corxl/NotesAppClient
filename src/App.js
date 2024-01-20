@@ -7,6 +7,7 @@ import { AccountPage } from './components/Account';
 import Login from './components/Login/Login.tsx';
 import { NotesPage } from './components/Notes/NotesPage';
 import { LoginContext } from './context/LoginContext.tsx';
+import RequireLogin from './components/RequireLogin/RequireLogin.tsx';
 
 export async function checkAuth() {
 	let auth = true;
@@ -66,8 +67,12 @@ function App() {
 						<Routes>
 							<Route index element={<Navigate to={'/login'} />} />
 							<Route path="/login" element={<Login />} />
-							<Route path="/dashboard" element={<NotesPage />} />
-							<Route path="/account" element={<AccountPage />} />
+							<Route path="/dashboard" element={
+								<RequireLogin children ={<NotesPage /> }/>
+							}/>
+							<Route path="/account" element={
+								<RequireLogin children={<AccountPage />} />
+							}/>
 						</Routes> 
 					</div>  
 				</HashRouter>
