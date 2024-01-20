@@ -8,7 +8,7 @@ export type NotesPageState = {
 	notesToDelete: number[];
 };
 
-export type CREATE_NOTE = { type: 'CREATE_NOTE' };
+export type CREATE_NOTE = { type: 'CREATE_NOTE'; payload: PageNote };
 export type DELETE_NOTE = { type: 'DELETE_NOTE'; payload: number };
 export type UPDATE_NOTE = {
 	type: 'UPDATE_NOTE';
@@ -19,6 +19,7 @@ export type SET_NOTES_TO_DELETE = {
 	type: 'SET_NOTES_TO_DELETE';
 	payload: number[];
 };
+export type SET_NOTES = { type: 'SET_NOTES'; payload: PageNote[] };
 export type CLEAR_NOTES_TO_DELETE = { type: 'CLEAR_NOTES_TO_DELETE' };
 
 export type NotesPageActions =
@@ -27,7 +28,8 @@ export type NotesPageActions =
 	| UPDATE_NOTE
 	| SET_NOTE_INDEX
 	| SET_NOTES_TO_DELETE
-	| CLEAR_NOTES_TO_DELETE;
+	| CLEAR_NOTES_TO_DELETE
+	| SET_NOTES;
 
 export function notesPageReducer(
 	state: NotesPageState,
@@ -38,12 +40,7 @@ export function notesPageReducer(
 			return {
 				...state,
 				notes: [
-					...state.notes,
-					{
-						title: 'Untitled Note',
-						content: state.notes.length.toString(),
-						id: uuidv4(),
-					},
+					...state.notes, action.payload as PageNote,
 				],
 				noteIndex: state.notes.length,
 			};
@@ -86,6 +83,18 @@ export function notesPageReducer(
 				),
 				notesToDelete: [] as number[],
 				noteIndex: -1,
+			};
+		case 'SET_NOTES':
+			if (action.payload.length !== 0) {
+				return {
+					...state,
+					notes: action.payload,
+					noteIndex: 0,
+				};
+			}
+			return {
+				...state, 
+				notes: action.payload,
 			};
 		default:
 			return state; 

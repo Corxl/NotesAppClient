@@ -22,14 +22,6 @@ export default function NotesPage() {
     noteIndex: -1, // replace with URL params for index
     notesToDelete: []
   }); 
-  const { isLoggedIn } = useContext(LoginContext); 
-  const navigator = useNavigate(); 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigator('/login');
-    } 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   return (
 		<>
 			<Navbar />

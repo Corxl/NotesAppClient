@@ -7,6 +7,8 @@ import React, { useEffect, useState } from 'react';
 import NoteSelector from '../NoteSelector/NoteSelector.tsx';
 import { NotesPageActions, NotesPageState } from '../notesReducer.tsx';
 import './NoteList.css';
+import { useLogin } from '../../../hooks/useLogin.tsx';
+import { PageNote } from '../NotesPage/NotesPage.tsx';
 
 interface NoteListProps {
   notesState: NotesPageState,
@@ -14,25 +16,33 @@ interface NoteListProps {
 }
 
 export default function NoteList(props: NoteListProps) {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [editList, setEditList] = useState<boolean>(false);
-//   const { notes, setNotes, noteIndex, setNoteIndex, notesToDelete, setNotesToDelete, createNote } = props
-  const  {notesState, notesDispatch}  = props;
+	const [loading, setLoading] = useState<boolean>(true);
+	const [editList, setEditList] = useState<boolean>(false);
+	//   const { notes, setNotes, noteIndex, setNoteIndex, notesToDelete, setNotesToDelete, createNote } = props
+	const  {notesState, notesDispatch}  = props;
+	const { getNotes, addNote } = useLogin();
 
-  console.log(notesState.notesToDelete)
-  console.log(notesState.notes)
-  
-   useEffect(() => {
-		// simulate loading
-		if (notesState.notes.length > 0) {
-			setLoading(false);
-			return;
-		}
-		setTimeout(() => {
-			setLoading(false);
-		}, 2500);
+	console.log(notesState.notesToDelete)
+	console.log(notesState.notes)
+	
+	useEffect(() => { 
+		(async ()=>{
+			try {
+				const notes = await getNotes();
+				console.log(notes)
+				notesDispatch({type: 'SET_NOTES', payload: notes})
+				setLoading(false)
+			} catch (err) {
+				console.log(err);
+			}
+		})() 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []); 	
+	async function handleAddNote() { 
+		const note = await addNote();
+		console.log(note)
+		notesDispatch({type: 'CREATE_NOTE', payload: note})
+	}
   return (
 		<div className="notes-list">
 			<div className="list-actions">
@@ -64,7 +74,7 @@ export default function NoteList(props: NoteListProps) {
 					)}
 				</IconButton>
 				<IconButton
-					onClick={() => notesDispatch({type: 'CREATE_NOTE'})}
+					onClick={handleAddNote}
 					size="small"
 					style={{ width: 'fit-content' }}>
 					<AddBoxTwoToneIcon
@@ -112,9 +122,9 @@ export default function NoteList(props: NoteListProps) {
 						</div>
 					);
 				})}
-			{notesState.notes.map((note, index) => {
+			{notesState.notes.map((_, index) => {
 				return (
-					<NoteSelector notesState={notesState} notesDispatch={notesDispatch} enableEditCheckbox={editList} index={index}/> 
+					<NoteSelector notesState={notesState} notesDispatch={notesDispatch} enableEditCheckbox={editList} index={index} key={index}/> 
 				);
 			})}
 			<Button content="Refresh" />

@@ -13,6 +13,7 @@ export default function Login() {
 	async function handleLogin() {
 		if (!username.current?.value || !password.current?.value) return;
 		const isAuth = await login(username.current.value, password.current.value);
+		console.log(isAuth);
 		if (isAuth) {
 			setIsLoggedIn(true);
 			navigate('/dashboard');

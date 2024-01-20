@@ -1,7 +1,7 @@
  import axios from 'axios';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
 import { useEffect, useState } from 'react';
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { AccountPage } from './components/Account';
 import Login from './components/Login/Login.tsx';
@@ -17,6 +17,7 @@ function App() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false); 
 	axios.defaults.withCredentials = true; 
 	const { checkAuth } = useLogin();
+
 	// async function handleLogin() {
 	// 	await axios.post('http://localhost:3001/users/login',
 	// 		{ 
@@ -45,15 +46,10 @@ function App() {
 	// 	handleLogin();
 // 	handleProtected();
 	// }, []); 
-	useEffect(() => {
-		(async ()=>{
-			await checkAuth();
-		})()
-	} , []);
 
     return (
 			<LoginContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-				<HashRouter>
+				<BrowserRouter>
 					<div className="App">
 						<Routes>
 							<Route index element={<Navigate to={'/login'} />} />
@@ -66,7 +62,7 @@ function App() {
 							}/>
 						</Routes> 
 					</div>  
-				</HashRouter>
+				</BrowserRouter>
 			</LoginContext.Provider>
 		);
 }
