@@ -6,8 +6,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 As of right now there is a default user login. Details below:
 
-Username: test
-Password: test
+Username: "test"
+
+Password: "test"
 
 ## Available Scripts
 
