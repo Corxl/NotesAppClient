@@ -1,12 +1,15 @@
 # Getting Started
-Install Node.js and NPM
+1. Install Node.js and NPM
 [Node.js and Node Package Manager (npm)](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) 
 
-Clone project with:
+2. Clone project with:
 `git clone https://github.com/Corxl/NotesAppClient`
 
-Install node modules:
+3. Install node modules:
 `npm i`
+
+### Server
+This project uses an Node/express back-end found [here](https://github.com/Corxl/NotesAppServer)
 
 ## Available Scripts
 
