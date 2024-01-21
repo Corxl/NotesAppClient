@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# System Requirements
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Node.js and Node Package Manager (npm)](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) 
 
 ## Test Login Account
 
