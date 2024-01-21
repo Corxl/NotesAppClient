@@ -1,4 +1,4 @@
-# Getting Started
+# Client for Notes App
 ## Setup
 1. Install Node.js and NPM
 [Node.js and Node Package Manager (npm)](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) 
