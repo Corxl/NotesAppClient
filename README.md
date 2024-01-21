@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Test Login Account
+
+As of right now there is a default user login. Details below:
+
+Username: test
+Password: test
+
 ## Available Scripts
 
 In the project directory, you can run:
