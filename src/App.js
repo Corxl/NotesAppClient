@@ -52,7 +52,7 @@ function App() {
 				<BrowserRouter>
 					<div className="App">
 						<Routes>
-							<Route index element={<Navigate to={'/login'} />} />
+							<Route index element={<Navigate to={'/dashboard'} />} />
 							<Route path="/login" element={<Login />} />
 							<Route path="/dashboard" element={
 								<RequireLogin children ={<NotesPage /> }/>

@@ -5,6 +5,7 @@ import { Button, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/mat
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
+import { useLogin } from '../../../hooks/useLogin.tsx';
 import { NotesPageActions, NotesPageState } from '../notesReducer.tsx';
 import './NoteContent.css';
 
@@ -24,13 +25,23 @@ export default function NoteContent(props: NoteProps) {
 
   const [saveConfirm, setSaveConfirm] = useState(false);
 
+  const { updateNote } = useLogin();
+
   const refreshPage = useCallback(() => { 
     setTitle(note.title);
     setContent(note.content);
     
   }, [note.title, note.content]); 
-  function saveNote() {
-    notesDispatch({type: 'UPDATE_NOTE', payload: {index: notesState.noteIndex, newNote: {title: title, content: content}}})
+  async function saveNote() {
+    console.log(note)
+    const updatedNote = await updateNote(note._id, title, content);
+    notesDispatch({
+			type: 'UPDATE_NOTE',
+			payload: {
+				index: notesState.noteIndex,
+				newNote: { title: updatedNote.title, content: updatedNote.content },
+			},
+		}); 
     setIsEditing(editing => !editing);
     refreshPage(); 
   } 

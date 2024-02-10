@@ -56,7 +56,14 @@ export function useLogin() {
         console.log("1")
         await axios.get('http://localhost:3001/users/getNotes').then((res) => {
             console.log(res);
-            notes = res.data;
+            notes = res.data.map((note: PageNote) => {
+                return {
+                    title: note.title,
+                    content: note.contents,
+                    id: note.id,
+                    hasSaved: true,
+                };
+            });
         });
         console.log('2');
 
@@ -76,14 +83,17 @@ export function useLogin() {
             return false;
         });
     }
-    async function updateNote(id: string, title: string, content: string) {
+    async function updateNote(id: string, title: string, content: string) { 
+        var note;
         await axios.post(`http://localhost:3001/users/updateNote/${id}`, {title, content}).then((res) => {
             console.log(res);
-            return true;
+            note = res.data.note;
         }).catch((err) => {
             console.log(err);
-            return false;
-        });
+            throw new Error('Failed to update note');
+        }); 
+
+        return note;
     }
 
     return { checkAuth, login, logout, register, getNotes, addNote, deleteNote, updateNote };
