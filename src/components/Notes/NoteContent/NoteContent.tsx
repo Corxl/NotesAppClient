@@ -28,13 +28,15 @@ export default function NoteContent(props: NoteProps) {
   const { updateNote } = useLogin();
 
   const refreshPage = useCallback(() => { 
+    console.log('refreshing page')
+    console.log(note.title, note.content, notesState.noteIndex)
     setTitle(note.title);
-    setContent(note.content);
+    setContent(note.content || '');
     
   }, [note.title, note.content]); 
   async function saveNote() {
-    console.log(note)
-    const updatedNote = await updateNote(note._id, title, content);
+    console.log(note.id)
+    const updatedNote = await updateNote(note.id, title, content);
     notesDispatch({
 			type: 'UPDATE_NOTE',
 			payload: {

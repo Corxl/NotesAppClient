@@ -57,15 +57,16 @@ export function useLogin() {
         await axios.get('http://localhost:3001/users/getNotes').then((res) => {
             console.log(res);
             notes = res.data.map((note: PageNote) => {
+                console.log(note._id);
                 return {
                     title: note.title,
                     content: note.contents,
-                    id: note.id,
+                    id: note._id,
                     hasSaved: true,
                 };
             });
+            console.log(notes);
         });
-        console.log('2');
 
         return notes;
     }
@@ -85,7 +86,8 @@ export function useLogin() {
     }
     async function updateNote(id: string, title: string, content: string) { 
         var note;
-        await axios.post(`http://localhost:3001/users/updateNote/${id}`, {title, content}).then((res) => {
+        console.log(id, title, content);
+        await axios.post(`http://localhost:3001/users/updateNote`, {title, content, id}).then((res) => {
             console.log(res);
             note = res.data.note;
         }).catch((err) => {
