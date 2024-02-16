@@ -16,36 +16,7 @@ function App() {
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false); 
 	axios.defaults.withCredentials = true; 
-	const { checkAuth } = useLogin();
-
-	// async function handleLogin() {
-	// 	await axios.post('http://localhost:3001/users/login',
-	// 		{ 
-	// 			username: 'test',
-	// 			password: 'test', 
-	// 		}).then((res) => {
-	// 		console.log(res);
-	// 		setIsLoggedIn(true);
-	// 	}
-	// 	).catch((err) => {
-	// 		console.log(err);
-	// 		setIsLoggedIn(false);
-	// 	});
-	// } 
-	// async function handleProtected() {
-	// 	await axios.get('http://localhost:3001/users/protected').then((res) => {
-	// 		console.log(res);
-	// 		// setIsLoggedIn(true);
-	// 	}
-	// 	).catch((err) => {
-	// 		console.log(err);
-	// 		// setIsLoggedIn(false);
-	// 	});
-	// }
-	// useEffect(() => {
-	// 	handleLogin();
-// 	handleProtected();
-	// }, []); 
+	const { checkAuth } = useLogin();  
 
     return (
 			<LoginContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
@@ -54,6 +25,7 @@ function App() {
 						<Routes>
 							<Route index element={<Navigate to={'/dashboard'} />} />
 							<Route path="/login" element={<Login />} />
+							{/*TODO: refactor dashboard to be note specific. /dashboard/<noteId>*/}
 							<Route path="/dashboard" element={
 								<RequireLogin children ={<NotesPage /> }/>
 							}/>

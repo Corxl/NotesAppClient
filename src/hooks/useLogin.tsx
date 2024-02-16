@@ -3,6 +3,19 @@ import { PageNote } from "../components/Notes/NotesPage/NotesPage";
 
 axios.defaults.withCredentials = true;
 
+/* 
+TODO: refactor note data types to match better with the server
+*/ 
+type NoteResponse = {
+	_id: string;
+	title: string;
+	owner: string;
+	createdAt: string;
+	updatedAt: string;
+	__v: number;
+	contents: string;
+};
+
 export function useLogin() {
     async function checkAuth(): Promise<boolean> {
         let auth = false;
@@ -51,12 +64,15 @@ export function useLogin() {
         });
         return isSuccessful;
     }
+
+    // TODO: get return values should only contain the title, content, and access ID. 
+    // Create getNote(id: string) function to get the note by ID when the user clicks on a note selector.
     async function getNotes() {
         let notes = [] as PageNote[];
         console.log("1")
         await axios.get('http://localhost:3001/users/getNotes').then((res) => {
             console.log(res);
-            notes = res.data.map((note: PageNote) => {
+            notes = res.data.map((note: NoteResponse) => {
                 console.log(note._id);
                 return {
                     title: note.title,
