@@ -2,16 +2,19 @@
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
 import { IconButton } from "@mui/material";
 import React from "react";
-import { NotesPageActions } from "../NotesPage/NotesPage";
+import { useNavigate } from "react-router-dom";
+import { useLogin } from "../../../hooks/useLogin.tsx";
 
-interface Props {
-	notesDispatch: React.Dispatch<NotesPageActions>; 
-}
+export default function NoteEmpty() {
 
-export default function NoteEmpty({notesDispatch}: Props) {
+  const { addNote } = useLogin();
+  const nav = useNavigate();
   return (
     <div className='note note-empty'>
-      <IconButton onClick={()=> notesDispatch({type: 'CREATE_NOTE'})} >
+      <IconButton onClick={async ()=> {
+        const newNote = await addNote();
+        nav(`/dashboard/${newNote.id}`);
+      }} >
           <AddCircleOutline />
       </IconButton>
       <div className='note-empty-text'>

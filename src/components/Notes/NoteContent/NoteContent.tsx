@@ -5,58 +5,51 @@ import { Button, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/mat
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
+import { useParams } from 'react-router-dom';
 import { useLogin } from '../../../hooks/useLogin.tsx';
-import { NotesPageActions, NotesPageState } from '../notesReducer.tsx';
 import './NoteContent.css';
 
+export default function NoteContent() { 
 
-interface NoteProps {
-	notesState: NotesPageState;
-  notesDispatch: React.Dispatch<NotesPageActions>;
-}
-
-export default function NoteContent(props: NoteProps) {
-  const {notesState, notesDispatch} = props; 
-  const note  = notesState.notes[notesState.noteIndex];
-
-  const [title, setTitle] = useState(note.title);
-  const [content, setContent] = useState(note.content); 
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState(''); 
   const [isEditing, setIsEditing] = useState(false); 
 
   const [saveConfirm, setSaveConfirm] = useState(false);
 
-  const { updateNote } = useLogin();
+  const { updateNote, getNote } = useLogin();
 
-  const refreshPage = useCallback(() => { 
-    console.log('refreshing page')
-    console.log(note.title, note.content, notesState.noteIndex)
-    setTitle(note.title);
-    setContent(note.content || '');
-    
-  }, [note.title, note.content]); 
-  async function saveNote() {
-    console.log(note.id)
-    const updatedNote = await updateNote(note.id, title, content);
-    notesDispatch({
-			type: 'UPDATE_NOTE',
-			payload: {
-				index: notesState.noteIndex,
-				newNote: { title: updatedNote.title, content: updatedNote.content },
-			},
-		}); 
-    setIsEditing(editing => !editing);
-    refreshPage(); 
+  const { noteId } = useParams<string>();
+
+  const updatePage = useCallback(async () => {
+		if (!noteId) return;
+		try {
+			const resNote = await getNote(noteId);
+			setTitle(resNote.title);
+			setContent(resNote.content || '');
+		} catch (err) {
+			console.log(err);
+		}
+	}, [getNote, noteId]); 
+
+  async function saveNote() { 
+    if (!noteId) return;
+    const updatedNote = await updateNote(noteId, title, content); 
+    setIsEditing(false);
+    setTitle(updatedNote.title);
+    setContent(updatedNote.content);
   } 
 
-  useEffect(() => {
-    setIsEditing(note.hasSaved === undefined || note.hasSaved === false); 
-  }, [note.hasSaved])
+  // TODO: Add variable to notes on the back end called "hasSaved" and set it to false until the note is saved/updated.
+  // useEffect(() => {
+  //   setIsEditing(note.hasSaved === undefined || note.hasSaved === false); 
+  // }, [note.hasSaved]) 
 
-
   useEffect(() => {
-    refreshPage();
+    console.log('updatePage')
+    updatePage();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notesState])
+  }, [noteId])
 
   return (
     <div className='note'>
@@ -78,10 +71,10 @@ export default function NoteContent(props: NoteProps) {
         <div className='note-buttons'>
           <IconButton className='note-button' onClick={() => {
             setIsEditing(editing => !editing)
-            if (isEditing) {
-              setContent(note.content)
-              setTitle(note.title)
-            }
+            // if (isEditing) {
+            //   setContent(note.content)
+            //   setTitle(note.title)
+            // }
           }} >
             {
               !isEditing ? <EditIcon /> : <EditOutlinedIcon />

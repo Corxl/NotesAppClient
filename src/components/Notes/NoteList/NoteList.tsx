@@ -4,51 +4,50 @@ import EditIcon from '@mui/icons-material/Edit';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Button, IconButton, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import NoteSelector from '../NoteSelector/NoteSelector.tsx';
-import { NotesPageActions, NotesPageState } from '../notesReducer.tsx';
-import './NoteList.css';
+import { useParams } from 'react-router-dom';
 import { useLogin } from '../../../hooks/useLogin.tsx';
+import NoteSelector from '../NoteSelector/NoteSelector.tsx';
 import { PageNote } from '../NotesPage/NotesPage.tsx';
+import './NoteList.css';
 
-interface NoteListProps {
-  notesState: NotesPageState,
-  notesDispatch: React.Dispatch<NotesPageActions>
-}
-
-export default function NoteList(props: NoteListProps) {
+export default function NoteList(props) {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [editList, setEditList] = useState<boolean>(false);
 	//   const { notes, setNotes, noteIndex, setNoteIndex, notesToDelete, setNotesToDelete, createNote } = props
-	const  {notesState, notesDispatch}  = props;
-	const { getNotes, addNote } = useLogin();
+	const { getNotes, addNote } = useLogin(); 
+	const [noteList, setNoteList] = useState<PageNote[]>([]);
+	const { noteId } = useParams<string>();
 
-	console.log(notesState.notesToDelete)
-	console.log(notesState.notes)
-	
-	useEffect(() => { 
-		(async ()=>{
-			try {
-				const notes = await getNotes();
-				console.log(notes)
-				notesDispatch({type: 'SET_NOTES', payload: notes})
-				setLoading(false)
-			} catch (err) {
-				console.log(err);
-			}
-		})() 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []); 	
-	async function handleAddNote() { 
-		const note = await addNote();
-		console.log(note)
-		notesDispatch({type: 'CREATE_NOTE', payload: note})
+
+	async function updateNoteList() {
+		setLoading(true);
+		try {
+			const notes = await getNotes();
+			console.log(notes);
+			setNoteList(notes);
+			setLoading(false);
+		} catch (err) {
+			console.log(err);
+		}
+		setLoading(false);
 	}
-  return (
+
+	useEffect(() => { 
+		updateNoteList(); 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	async function handleAddNote() {
+		const note = await addNote();
+		console.log(note);
+		updateNoteList();
+	}
+	return (
 		<div className="notes-list">
 			<div className="list-actions">
-				{editList === true && notesState.notes.length > 0 ? (
+				{editList === true && noteList.length > 0 ? (
 					<IconButton
-						onClick={() => notesDispatch({type: 'CLEAR_NOTES_TO_DELETE'})}
+						onClick={() => {/*notesDispatch({ type: 'CLEAR_NOTES_TO_DELETE'*/}}
 						size="small"
 						style={{ width: 'fit-content' }}>
 						<DeleteIcon
@@ -122,9 +121,14 @@ export default function NoteList(props: NoteListProps) {
 						</div>
 					);
 				})}
-			{notesState.notes.map((_, index) => {
+			{noteList.map((n, index) => {
 				return (
-					<NoteSelector notesState={notesState} notesDispatch={notesDispatch} enableEditCheckbox={editList} index={index} key={index}/> 
+					<NoteSelector
+						enableEditCheckbox={editList}
+						noteInfo={{title: n.title, content: n.content, id: n.id}}
+						isSelected={noteId === n.id}
+						key={index}
+					/>
 				);
 			})}
 			<Button content="Refresh" />

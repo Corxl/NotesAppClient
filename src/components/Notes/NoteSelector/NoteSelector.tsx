@@ -1,42 +1,22 @@
 import { Checkbox } from '@mui/material';
-import React, { useEffect } from 'react';
-import { NotesPageActions, NotesPageState } from '../notesReducer.tsx';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './NoteSelector.css';
 
 interface NoteSelectorProps {
-	notesState: NotesPageState;
-	notesDispatch: React.Dispatch<NotesPageActions>;
     enableEditCheckbox: boolean;
-    index: number;
+	noteInfo: {
+		title: string;
+		content: string;
+		id: string;
+	}
+	isSelected: boolean;
 }
 
-export default function NoteSelector({ notesState, notesDispatch, enableEditCheckbox, index}: NoteSelectorProps) {
-    const selected = notesState.noteIndex === index;
-	const [checked, setChecked] = React.useState(false);
-    const note = notesState.notes[index];
+export default function NoteSelector({ enableEditCheckbox, noteInfo, isSelected }: NoteSelectorProps) {
 
-	useEffect(() => {
-		if (checked) {
-			notesDispatch({
-				type: 'SET_NOTES_TO_DELETE',
-				payload: [...notesState.notesToDelete, index],
-			});
-		} else {
-			notesDispatch({
-				type: 'SET_NOTES_TO_DELETE',
-				payload: notesState.notesToDelete.filter(
-					(noteIndex) => noteIndex !== index
-				),
-			});
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [checked]);
-
-	useEffect(() => {
-		if (notesState.notesToDelete.length === 0) {
-			setChecked(false);
-		}
-	}, [notesState]);
+	const [checked, setChecked] = React.useState(false); 
+	const nav = useNavigate(); 
 
 	return (
 		<>
@@ -53,14 +33,17 @@ export default function NoteSelector({ notesState, notesDispatch, enableEditChec
 				)}
 				<div style={{ gap: '20px', width: '100%' }}>
 					<div
-						className={'note-selector' + (selected ? ' selected' : '')}
-						onClick={() => notesDispatch({type: 'SET_NOTE_INDEX', payload: index })}>
+						className={'note-selector' + (isSelected ? ' selected' : '')}
+						onClick={() => {
+							// notesDispatch({ type: 'SET_NOTE_INDEX', payload: index }); 
+							nav(`/dashboard/${noteInfo.id}`);
+						}}>
 						<div
 							className="note-selector-description"
 							style={{ fontSize: '125%' }}>
-							{note.title}
+							{noteInfo.title}
 						</div>
-						<div className="note-selector-description">{note.content}</div>
+						<div className="note-selector-description">{noteInfo.content}</div>
 					</div>
 				</div>
 			</div>

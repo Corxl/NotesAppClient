@@ -36,7 +36,7 @@ export function useLogin() {
         let auth = false;
         await axios.post('http://localhost:3001/users/login', {
             username: username,
-            password: password
+            password: password 
         }).then((res) => {
             console.log(res);
             auth = true;
@@ -68,8 +68,8 @@ export function useLogin() {
     // TODO: get return values should only contain the title, content, and access ID. 
     // Create getNote(id: string) function to get the note by ID when the user clicks on a note selector.
     async function getNotes() {
-        let notes = [] as PageNote[];
-        console.log("1")
+        let notes = [] as PageNote[]; 
+        console.log("2")
         await axios.get('http://localhost:3001/users/getNotes').then((res) => {
             console.log(res);
             notes = res.data.map((note: NoteResponse) => {
@@ -85,6 +85,21 @@ export function useLogin() {
         });
 
         return notes;
+    }
+
+    async function getNote(id: string) {
+        let note = {} as PageNote;
+        await axios.get(`http://localhost:3001/users/getNote/${id}`).then((res) => {
+            console.log(res);
+            note = {
+                title: res.data.title,
+                content: res.data.contents,
+                id: res.data._id,
+                hasSaved: true,
+            };
+        });
+
+        return note;
     }
     async function addNote(): Promise<PageNote> { 
         const note = (await axios.post('http://localhost:3001/users/addNote')).data as PageNote;
@@ -114,6 +129,6 @@ export function useLogin() {
         return note;
     }
 
-    return { checkAuth, login, logout, register, getNotes, addNote, deleteNote, updateNote };
+    return { checkAuth, login, logout, register, getNotes, getNote, addNote, deleteNote, updateNote };
 }
 

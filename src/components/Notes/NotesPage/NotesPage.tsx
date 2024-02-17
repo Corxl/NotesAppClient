@@ -1,13 +1,11 @@
 import 'primeicons/primeicons.css';
-import React, { useContext, useEffect, useReducer } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { LoginContext } from '../../../context/LoginContext.tsx';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Navbar from '../../NavBar/Navbar.tsx';
 import NoteContent from '../NoteContent/NoteContent.tsx';
 import { DefaultNotePage } from '../NoteContent/index.js';
 import NoteList from '../NoteList/NoteList.tsx';
-import { notesPageReducer } from '../notesReducer.tsx';
 import './NotesPage.css';
-import Navbar from '../../NavBar/Navbar.tsx';
 
 export interface PageNote {
 	title: string;
@@ -17,22 +15,19 @@ export interface PageNote {
 } 
 
 export default function NotesPage() { 
-  const [state, dispatch] = useReducer(notesPageReducer, {
-    notes: [], 
-    noteIndex: -1, // replace with URL params for index
-    notesToDelete: []
-  }); 
+
+	const { noteId } = useParams<string>();
+
+	useEffect(() => {
+		console.log('updatePage');
+	}, []);
   return (
 		<>
 			<Navbar />
 			<div className="notes-container">
-				<NoteList notesState={state} notesDispatch={dispatch} />
+				<NoteList />
 
-				{state.noteIndex >= 0 ? (
-					<NoteContent notesState={state} notesDispatch={dispatch} />
-				) : (
-					<DefaultNotePage notesDispatch={dispatch} />
-				)}
+				{noteId ? <NoteContent /> : <DefaultNotePage />}
 			</div>
 		</>
 	);
