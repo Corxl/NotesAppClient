@@ -1,12 +1,12 @@
 import 'primeicons/primeicons.css';
+import { Toast } from 'primereact/toast';
 import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../../NavBar/Navbar.tsx';
 import NoteContent from '../NoteContent/NoteContent.tsx';
 import { DefaultNotePage } from '../NoteContent/index.js';
 import NoteList from '../NoteList/NoteList.tsx';
-import './NotesPage.css'; 
-import { Toast } from 'primereact/toast';
+import './NotesPage.css';
 export interface PageNote {
 	title: string;
 	content: string;
@@ -17,6 +17,18 @@ export interface PageNote {
 export default function NotesPage() { 
 
 	const { noteId } = useParams<string>();
+	const notification = useRef<Toast>(null);
+	function showNotification(
+		summary: string,
+		detail: string,
+		severity: 'success' | 'info' | 'warn' | 'error' | undefined = 'info'
+	) {
+		notification.current?.show({
+			severity: severity,
+			summary: summary,
+			detail: detail,
+		});
+	}
 	useEffect(() => {
 		console.log('updatePage');
 	}, []); 
@@ -26,8 +38,9 @@ export default function NotesPage() {
 			<div className="notes-container">
 				<NoteList />
 
-				{noteId ? <NoteContent /> : <DefaultNotePage />}
+				{noteId ? <NoteContent showNotification={showNotification} /> : <DefaultNotePage />}
 			</div>
+			<Toast ref={notification} />
 		</>
 	);
 }

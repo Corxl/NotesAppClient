@@ -3,25 +3,30 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import { Button, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Toast } from 'primereact/toast';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useLogin } from '../../../hooks/useLogin.tsx';
 import './NoteContent.css';
-import { Toast } from 'primereact/toast';
 
-export default function NoteContent() { 
+
+
+export default function NoteContent(props: { showNotification: Function }) { 
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState(''); 
   const [isEditing, setIsEditing] = useState(false); 
-  const notification = useRef<Toast>(null);
+  const notification = useRef<Toast>(null); 
+
+  const showNotification = props.showNotification;
 
   const [saveConfirm, setSaveConfirm] = useState(false);
 
   const { updateNote, getNote } = useLogin();
 
   const { noteId } = useParams<string>();
+  const nav = useNavigate()
 
   const updatePage = useCallback(async () => {
 		if (!noteId) return;
@@ -29,10 +34,12 @@ export default function NoteContent() {
 			const resNote = await getNote(noteId);
 			setTitle(resNote.title);
 			setContent(resNote.content || '');
-		} catch (err) {
-			console.log(err);
+		} catch (err) { 
+			showNotification('Error', err.response.data.msg, 'error');
+			nav('/dashboard')
+			console.log(err.response.data);
 		}
-	}, [getNote, noteId]); 
+	}, [getNote, noteId, nav, showNotification]); 
 
   async function saveNote() { 
     let isSuccessful = false;
@@ -45,24 +52,25 @@ export default function NoteContent() {
       isSuccessful = true;
     } catch (err) {
       // SHOW ERROR TO USER
+	  
       console.log(err);
     }
     return isSuccessful;
   } 
 
-  function showNotification(summary: string, detail: string, severity: "success" | "info" | "warn" | "error" | undefined = 'info') {
-    notification.current?.show({ severity: severity, summary: summary, detail: detail });
-  }
+  
 
   // TODO: Add variable to notes on the back end called "hasSaved" and set it to false until the note is saved/updated.
   // useEffect(() => {
   //   setIsEditing(note.hasSaved === undefined || note.hasSaved === false); 
   // }, [note.hasSaved]) 
 
-  useEffect(() => {
+  useEffect(() => { 
+	// if (isLoading.current) return;
+	if (!noteId) return;
     console.log('updatePage')
     updatePage();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+	// eslint-disable-next-line
   }, [noteId])
 
   return (

@@ -23,13 +23,11 @@ export function useLogin() {
         await axios
             .get('http://localhost:3001/users/isAuth')
             .then((res) => {
-                console.log(res);
                 auth = true;
             })
             .catch((err) => {
                 console.log(err);
             });
-        console.log(auth)
         return auth;
     } 
     async function login(username: string, password: string) {
@@ -38,7 +36,6 @@ export function useLogin() {
             username: username,
             password: password 
         }).then((res) => {
-            console.log(res);
             auth = true;
         }).catch((err) => {
 
@@ -47,7 +44,6 @@ export function useLogin() {
         return auth;
     }
     async function logout() {
-        console.log('logout')
         await axios.post('http://localhost:3001/users/logout').catch((err) => {
             console.log(err);
         });
@@ -69,9 +65,7 @@ export function useLogin() {
     // Create getNote(id: string) function to get the note by ID when the user clicks on a note selector.
     async function getNotes() {
         let notes = [] as PageNote[]; 
-        console.log("2")
         await axios.get('http://localhost:3001/users/getNotes').then((res) => {
-            console.log(res);
             notes = res.data.map((note: NoteResponse) => {
                 console.log(note._id);
                 return {
@@ -81,7 +75,6 @@ export function useLogin() {
                     hasSaved: true,
                 };
             });
-            console.log(notes);
         });
 
         return notes;
@@ -90,7 +83,6 @@ export function useLogin() {
     async function getNote(id: string) {
         let note = {} as PageNote;
         await axios.get(`http://localhost:3001/users/getNote/${id}`).then((res) => {
-            console.log(res);
             note = {
                 title: res.data.title,
                 content: res.data.contents,
@@ -106,9 +98,9 @@ export function useLogin() {
         return note;
     }
 
+    // refactor so this actually returns a value
     async function deleteNote(id: string) {
-        await axios.delete(`http://localhost:3001/users/deleteNote/${id}`).then((res) => {
-            console.log(res);
+        await axios.delete(`http://localhost:3001/users/deleteNote/${id}`).then((res) => { 
             return true;
         }).catch((err) => {
             console.log(err);
@@ -117,9 +109,7 @@ export function useLogin() {
     }
     async function updateNote(id: string, title: string, content: string) { 
         var note;
-        console.log(id, title, content);
-        await axios.post(`http://localhost:3001/users/updateNote`, {title, content, id}).then((res) => {
-            console.log(res);
+        await axios.post(`http://localhost:3001/users/updateNote/${id}`, {title, content}).then((res) => { 
             note = res.data.note;
         }).catch((err) => {
             console.log(err);
