@@ -22,7 +22,7 @@ export function useLogin() {
         
         await axios
             .get('http://localhost:3001/users/isAuth')
-            .then((res) => {
+            .then((_) => {
                 auth = true;
             })
             .catch((err) => {

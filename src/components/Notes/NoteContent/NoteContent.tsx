@@ -35,8 +35,8 @@ export default function NoteContent(props: { showNotification: Function }) {
 			setTitle(resNote.title);
 			setContent(resNote.content || '');
 		} catch (err) { 
-			showNotification('Error', err.response.data.msg, 'error');
 			nav('/dashboard')
+			showNotification('Error', err.response.data.msg, 'error');
 			console.log(err.response.data);
 		}
 	}, [getNote, noteId, nav, showNotification]); 
@@ -68,7 +68,6 @@ export default function NoteContent(props: { showNotification: Function }) {
   useEffect(() => { 
 	// if (isLoading.current) return;
 	if (!noteId) return;
-    console.log('updatePage')
     updatePage();
 	// eslint-disable-next-line
   }, [noteId])

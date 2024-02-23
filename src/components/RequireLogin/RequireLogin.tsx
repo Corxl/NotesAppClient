@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from 'react'
-import { LoginContext } from '../../context/LoginContext.tsx';
-import { useNavigate } from 'react-router-dom';
-import { useLogin } from '../../hooks/useLogin.tsx';
 import axios from 'axios';
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LoginContext } from '../../context/LoginContext.tsx';
+import { useLogin } from '../../hooks/useLogin.tsx';
 
 type Props = { 
     children: React.ReactNode
@@ -20,11 +20,11 @@ export default function RequireLogin({children}: Props) {
             try {
                 const isAuth = await checkAuth();
                 setIsLoggedIn(isAuth);
-                console.log(isAuth)
                 if (!isAuth) {
                     navigator('/login');
                 }
             } catch (err) {
+                // show server offline error to user.
                 console.log(err);
             }
         })()
