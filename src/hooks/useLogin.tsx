@@ -17,18 +17,25 @@ type NoteResponse = {
 };
 
 export function useLogin() {
+
+    async function pingServer() {
+        await axios.get('http://localhost:3001/ping').then((res) => {}).catch((err) => {
+            throw new Error('Server is offline');
+        });
+    }
+
     async function checkAuth(): Promise<boolean> {
-        let auth = false;
-        
+        var returnVal;
+
         await axios
             .get('http://localhost:3001/users/isAuth')
-            .then((_) => {
-                auth = true;
+            .then((res) => {
+                returnVal = res.data;
             })
             .catch((err) => {
-                console.log(err);
-            });
-        return auth;
+                throw new Error('Could not authenticate');
+            });; 
+        return returnVal;
     } 
     async function login(username: string, password: string) {
         let auth = false;
@@ -119,6 +126,6 @@ export function useLogin() {
         return note;
     }
 
-    return { checkAuth, login, logout, register, getNotes, getNote, addNote, deleteNote, updateNote };
+    return { checkAuth, login, logout, register, getNotes, getNote, addNote, deleteNote, updateNote, pingServer };
 }
 

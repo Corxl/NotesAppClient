@@ -37,7 +37,6 @@ export default function NotesPage() {
 			<Navbar />
 			<div className="notes-container">
 				<NoteList />
-
 				{noteId ? <NoteContent showNotification={showNotification} /> : <DefaultNotePage />}
 			</div>
 			<Toast ref={notification} />
